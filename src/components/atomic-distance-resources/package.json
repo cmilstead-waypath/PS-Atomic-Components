@@ -1,6 +1,7 @@
 {
   "name": "atomic-distance-resources",
   "description": "This component provides a flexible way to apply geospatial filtering to search results.",
+  "homepage": "",
   "version": "1.0.0",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",

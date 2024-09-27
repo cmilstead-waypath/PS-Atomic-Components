@@ -10,10 +10,13 @@ export const config: Config = {
     {
       type: 'dist-custom-elements',
     },
+    /*  To prevent automatic readme.md generation during npm run build */
+    /*
     {
       type: 'docs-readme',
       dir: './',
     },
+    */
     {
       type: 'docs-json',
       file: 'docs/stencil-docs.json',

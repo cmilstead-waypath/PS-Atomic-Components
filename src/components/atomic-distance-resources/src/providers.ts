@@ -16,7 +16,9 @@ export class NavigatorPositionProvider {
             longitude: position.coords.longitude,
           });
           const latLngProvider = new LatLngCookiePositionProvider('33.1234|-84.1234');
-          latLngProvider.setPosition(40.7128, -74.0060); // Sets the lat_lng cookie to "40.7128|-74.0060"
+          if (position?.coords?.latitude && position?.coords?.longitude) {
+            latLngProvider.setPosition(position.coords.latitude, position.coords.longitude); // Sets the lat_lgn cookie
+          }       
         },
         (error) => {
           switch (error.code) {
@@ -63,7 +65,7 @@ export class LatLngCookiePositionProvider {
     const cookieValue = `${latitude}|${longitude}`;
 
     // Set or update the cookie with the new lat_lng value
-    document.cookie = `lat_lng=${cookieValue}; path=/; max-age=${60 * 60 * 24 * 30}`; // Cookie expires in 30 days
+    document.cookie = `lat_lgn=${cookieValue}; path=/; max-age=${60 * 60 * 24 * 30}`; // Cookie expires in 30 days
 
     // Update the local latLngCookie property
     this.latLngCookie = cookieValue;

@@ -17,7 +17,7 @@ The `atomic-distance-resources` component provides a flexible way to apply geosp
 
 This component is ideal for enabling location-based searches and refining search results based on proximity to a specified location.
 
-After a user allows geolocation on their browser, the latitude/longitude acquired from the navigator will be stored in a cookie called `lat_lng` 
+After a user allows geolocation on their browser, the latitude/longitude acquired from the navigator will be stored in a cookie called `lat_lgn` 
 
 <!-- Auto Generated Below -->
 

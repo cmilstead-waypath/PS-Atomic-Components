@@ -1,0 +1,30 @@
+<div id="pin-details">
+  <div class="title"><h1>{{title}}</h1></div>
+
+  {{#if showz32xaddressz32xinz32xpinz32xdetails}}
+  {{#if formattedz32xaddress}}
+  <div class="address">{{formattedz32xaddress}}</div>
+  {{/if}}
+  {{/if}}
+
+  <div class="categories">
+    {{#if facilitytype}}
+    {{#each facilitytype}}
+    <h4>{{this}}</h4>
+    {{/each}}
+    {{/if}}
+    {{#if producttypes}}
+    {{#each producttypes}}
+    <h4>{{this}}</h4>
+    {{/each}}
+    {{/if}}
+  </div>
+
+  {{#if telephone}}
+  <a class="phone" href="tel:{{telephone}}">{{telephone}}</a>
+  {{/if}}
+
+  {{#if showz32xaddressz32xinz32xpinz32xdetails}}
+  <a class="directions" href="https://www.google.com/maps/dir/Current+Location/{{latitudecomputedfield}},{{longitudecomputedfield}}" target="_blank">Directions</a>
+  {{/if}}
+</div>

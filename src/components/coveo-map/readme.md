@@ -1,0 +1,117 @@
+# Coveo Map 
+
+`coveo-map` is a custom Coveo Atomic component that displays search results as markers on a Google Map. This component uses Google Maps to provide a visual representation of results with geographic data, enhancing the user experience by allowing for spatial navigation and information display.
+
+## Features
+- **Google Maps Integration**: Integrates seamlessly with Google Maps using an API key, allowing for configurable zoom, center, and display controls.
+- **Customizable Markers**: Allows for custom SVG pin icons and hover icons for markers on the map.
+- **Info Window Customization**: Provides detailed info windows with support for template-based customization using placeholders and conditional content.
+- **Responsive Design**: Automatically adapts for mobile and desktop users, displaying markers as an overlay modal on mobile devices.
+- **Dynamic Field Mapping**: Displays relevant data by mapping result fields like latitude and longitude to the map.
+
+## Getting Started
+
+### Install & Setup
+- Ensure that you have a valid Google Maps API key to initialize the map component.
+- Add `coveo-map` to your project as a web component and provide necessary properties like latitude, longitude fields, and map center.
+
+### Usage Example
+```
+<coveo-map 
+  google-api-key="YOUR_GOOGLE_API_KEY"
+  latitude-field="latitudeField"
+  longitude-field="longitudeField"
+  map-center='{"lat": 37.7749, "lng": -122.4194}' 
+  initial-zoom="10"
+  pin-icon="https://yourdomain.com/icon.svg"
+  hover-pin-icon="https://yourdomain.com/hover-icon.svg"
+  info-window-template-url="https://yourdomain.com/info-window-template.html"
+  fields-to-include='["fieldA", "fieldB"]'>
+</coveo-map>
+```
+
+## Properties
+
+| Property                      | Attribute                      | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Type                                            | Default         |
+| ----------------------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------- | --------------- |
+| `disableInfoWindowAutoPan`    | `disable-info-window-auto-pan` | Controls whether the map automatically pans to the info window.                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `boolean`                                       | `false`         |
+| `fieldsToInclude`             | `fields-to-include`            | A list of non-default fields to include in the query results. Specify the property as an array using a JSON string representation:   <coveo-map fields-to-include='["fieldA", "fieldB"]'></coveo-map>                                                                                                                                                                                                                                                                                                                   | `string \| string[]`                            | `undefined`     |
+| `gestureHandling`             | `gesture-handling`             | Defines how the map handles gestures like zooming and panning.  Type: "none" \| "greedy" \| "cooperative" \| "auto"                                                                                                                                                                                                                                                                                                                                                                                                     | `"auto" \| "cooperative" \| "greedy" \| "none"` | `"cooperative"` |
+| `googleApiKey` _(required)_   | `google-api-key`               | A valid Google API key to be used for rendering the Google Map.                                                                                                                                                                                                                                                                                                                                                                                                                                                         | `string`                                        | `undefined`     |
+| `hoverPinIcon`                | `hover-pin-icon`               | The SVG icon used for the custom pin icon's hover state, replacing the `pinIcon` content on `mouseenter`.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch and display the icon from an external location. - Use a stringified SVG to render it directly.  Note: This icon will only be rendered if `pinIcon` is also set.                                                                                                                                                                | `string`                                        | `undefined`     |
+| `infoWindowMaxWidth`          | `info-window-max-width`        | Sets the maximum width of the InfoWindow.                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `number`                                        | `300`           |
+| `infoWindowTemplateUrl`       | `info-window-template-url`     | A URL pointing to a template file for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array . - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: <div class="title">{{title}} | `string`                                        | `undefined`     |
+| `initialZoom`                 | `initial-zoom`                 | Allows the user to set the initial zoom level of the map.                                                                                                                                                                                                                                                                                                                                                                                                                                                               | `number`                                        | `8`             |
+| `latitudeField` _(required)_  | `latitude-field`               | Specifies the name of the field that contains the latitude value.                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `string`                                        | `undefined`     |
+| `longitudeField` _(required)_ | `longitude-field`              | Specifies the name of the field that contains the longitude value.                                                                                                                                                                                                                                                                                                                                                                                                                                                      | `string`                                        | `undefined`     |
+| `mapCenter`                   | `map-center`                   | Allows the user to set the initial center of the map.  Expect a JSON string for { lat: number, lng: number }  Default: { lat: 0, lng: 0 }                                                                                                                                                                                                                                                                                                                                                                               | `string`                                        | `undefined`     |
+| `mapId`                       | `map-id`                       | Allows the user to specify a Google Maps Map ID for custom map styling.                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `string`                                        | `""`            |
+| `maxZoom`                     | `max-zoom`                     | Sets teh maximum zoom level. Default: 15                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | `number`                                        | `15`            |
+| `minZoom`                     | `min-zoom`                     | Sets the minimum zoom level. Default: 2                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | `number`                                        | `2`             |
+| `pinIcon`                     | `pin-icon`                     | The SVG icon to use for a custom pin icon.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch and display an icon from a given location. - Use a stringified SVG to display it directly.                                                                                                                                                                                                                                                                                                    | `string`                                        | `undefined`     |
+| `scrollwheel`                 | `scrollwheel`                  | Enables or disables zooming via the scroll wheel.                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | `boolean`                                       | `false`         |
+| `streetViewControl`           | `street-view-control`          | Controls whether the Street View control is visible.                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | `boolean`                                       | `true`          |
+| `zoomControl`                 | `zoom-control`                 | Allows users to enable or disable the zoom control.                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | `boolean`                                       | `true`          |
+
+## Advanced Marker Features
+### Custom Pin Icons
+* Use `pinIcon` to specify an SVG or URL for custom markers on the map.
+* Use `hoverPinIcon` to set a different icon when the user hovers over a marker.
+
+### Info Window Content
+- **Template-Based Customization**: The content of the info window that opens when a user clicks on a map marker can be customized using an external HTML template. Specify this template using the `infoWindowTemplateUrl` property.
+  
+- **Using Placeholders**: Within your template file, you can use placeholders in the format `{{fieldName}}`, which will be dynamically replaced with the values from the `result.raw` data of each search result. For example, if you want to display a title and description from the search results, your template might look like:
+    ```html
+    <div class="info-window-content">
+      <h2>{{title}}</h2>
+      <p>{{description}}</p>
+    </div>
+    ```
+    In this case, `{{title}}` and `{{description}}` will be replaced by the values from each search result's data.
+
+- **Conditional Rendering**: The template supports conditional blocks using `{{#if fieldName}}...{{/if}}`. This means content within the block will only be rendered if the field exists and is not empty. Here's an example:
+    ```html
+    {{#if address}}
+      <div class="address">{{address}}</div>
+    {{/if}}
+    ```
+    In this example, the `address` will only render if the `address` field is present in the result data.
+
+- **Handling Arrays in the Template**: If your `result.raw` data contains arrays, you can iterate over them using `{{#each arrayField}}...{{/each}}`. Here's an example:
+    ```html
+    {{#if categories}}
+      <ul class="categories">
+        {{#each categories}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+    {{/if}}
+    ```
+    This will render a list of items for the `categories` field, assuming it's an array.
+
+- **Dynamic Links and Images**: You can also use placeholders in HTML attributes to create dynamic content like links and images. For instance:
+    ```html
+    <a href="https://maps.google.com/?q={{latitudeField}},{{longitudeField}}" target="_blank">Get Directions</a>
+    <img src="{{imageUrl}}" alt="Location Image"/>
+    ```
+    The `href` attribute will generate a Google Maps link based on `latitudeField` and `longitudeField` fields, while the `src` attribute will dynamically set an image based on the `imageUrl` field.
+
+- **Fallback to Default Content**: If no `infoWindowTemplateUrl` is provided, a default template will be used, which only displays the title of the marker.
+    ```html
+    <div>
+      <h1>{{title}}</h1>      
+    </div>
+    ```
+
+This allows for flexible and powerful customization of what is displayed when a user interacts with map markers, providing a tailored experience based on your search data.
+
+### Responsive Behavior 
+* The component adapts to mobile screens by displaying marker details as an overlay modal.
+
+## Events
+The markers on the map will open an info window when clicked, providing more details from the result data. On mobile devices, the info window will be displayed as an overlay modal.
+
+----------------------------------------------
+
+*Built with [StencilJS](https://stenciljs.com/)*

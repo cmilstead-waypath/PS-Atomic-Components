@@ -65,7 +65,7 @@ export class LatLngCookiePositionProvider {
     const cookieValue = `${latitude}|${longitude}`;
 
     // Set or update the cookie with the new lat_lng value
-    document.cookie = `lat_lgn=${cookieValue}; path=/; max-age=${60 * 60 * 24 * 30}`; // Cookie expires in 30 days
+    document.cookie = `lat_lgn=${cookieValue}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=None; Secure`; // Cookie expires in 30 days
 
     // Update the local latLngCookie property
     this.latLngCookie = cookieValue;

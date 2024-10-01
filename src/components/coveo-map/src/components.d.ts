@@ -32,7 +32,11 @@ export namespace Components {
          */
         "infoWindowMaxWidth": number;
         /**
-          * A URL pointing to a template file for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array . - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: <div class="title">{{title}}
+          * An inline HTML template string for customizing the content of the info window.  - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available as placeholders in the template. - You can include conditional blocks using `{{#if field}}...{{/if}}` to render content only if the field is present. - Array fields can be iterated over using `{{#each arrayField}}...{{/each}}`, with `{{this}}` representing each item in the array. - This property takes precedence over `infoWindowTemplateUrl` if both are set.  Example: ```html <div id="pin-details"> <div class="title"><h1>{{title}}</h1></div> <div class="extra"> {{#if fieldA}} <p>{{fieldA}}</p> {{/if}} {{#if fieldB}} <p>{{fieldB}}</p> {{/if}} </div> </div> ```
+         */
+        "infoWindowTemplate": string;
+        /**
+          * A URL pointing to a template file (.html) for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template. - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: ```<div id="pin-details"><div class="title">{{title}}</div></div>```
          */
         "infoWindowTemplateUrl": string;
         /**
@@ -119,7 +123,11 @@ declare namespace LocalJSX {
          */
         "infoWindowMaxWidth"?: number;
         /**
-          * A URL pointing to a template file for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array . - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: <div class="title">{{title}}
+          * An inline HTML template string for customizing the content of the info window.  - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available as placeholders in the template. - You can include conditional blocks using `{{#if field}}...{{/if}}` to render content only if the field is present. - Array fields can be iterated over using `{{#each arrayField}}...{{/each}}`, with `{{this}}` representing each item in the array. - This property takes precedence over `infoWindowTemplateUrl` if both are set.  Example: ```html <div id="pin-details"> <div class="title"><h1>{{title}}</h1></div> <div class="extra"> {{#if fieldA}} <p>{{fieldA}}</p> {{/if}} {{#if fieldB}} <p>{{fieldB}}</p> {{/if}} </div> </div> ```
+         */
+        "infoWindowTemplate"?: string;
+        /**
+          * A URL pointing to a template file (.html) for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template. - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: ```<div id="pin-details"><div class="title">{{title}}</div></div>```
          */
         "infoWindowTemplateUrl"?: string;
         /**

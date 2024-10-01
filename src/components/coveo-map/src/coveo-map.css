@@ -22,66 +22,66 @@ coveo-map div#map {
     transition: opacity .15s linear 0s;
   }
 
-    coveo-map div#location-pin-details-modal.open {
-      display: block;
-      overflow: hidden auto;
-      opacity: 1;
-    }
+  coveo-map div#location-pin-details-modal.open {
+    display: block;
+    overflow: hidden auto;
+    opacity: 1;
+  }
 
-      coveo-map div#location-pin-details-modal.open .modal-overlay {
-        opacity: 1;
-      }
+  coveo-map div#location-pin-details-modal.open .modal-overlay {
+    opacity: 1;
+  }
 
-      coveo-map div#location-pin-details-modal.open .modal-dialog {
-        transform: translate(0px, 25%);
-        box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
-        overflow-x: hidden;
-      }
+  coveo-map div#location-pin-details-modal.open .modal-dialog {
+    transform: translate(0px, 25%);
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.25);
+    overflow-x: hidden;
+  }
 
-    coveo-map div#location-pin-details-modal .modal-overlay {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      top: 0px;
-      right: 0px;
-      left: 0px;
-      opacity: 0;
-      background: rgba(0,0,0,.45);
-      transition: opacity 0.15s linear 0s;
-    }
+  coveo-map div#location-pin-details-modal .modal-overlay {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    opacity: 0;
+    background: rgba(0,0,0,.45);
+    transition: opacity 0.15s linear 0s;
+  }
 
-    coveo-map div#location-pin-details-modal .modal-dialog {
-      position: relative;
-      margin: 10% auto;
-      width: 90%;
-      transform: translate(0px, -25%);
-      transition: transform 0.3s ease-out 0s;
-    }
+  coveo-map div#location-pin-details-modal .modal-dialog {
+    position: relative;
+    margin: 10% auto;
+    width: 90%;
+    transform: translate(0px, -25%);
+    transition: transform 0.3s ease-out 0s;
+  }
 
-      coveo-map div#location-pin-details-modal .modal-dialog span.close-button {
-        display: inline-flex;
-        z-index: 1040;
-        position: absolute;
-        width: auto;
-        right: 0;
-        top: 0;
-      }
+  coveo-map div#location-pin-details-modal .modal-dialog span.close-button {
+    display: inline-flex;
+    z-index: 1040;
+    position: absolute;
+    width: auto;
+    right: 0;
+    top: 0;
+  }
 
-        coveo-map div#location-pin-details-modal .modal-dialog span.close-button a.close-modal {
-          margin: 15px 10px 0 0;
-          display: -ms-inline-flexbox;
-          display: inline-flex;
-          box-sizing: border-box;
-          padding: 0;
-          background: #fff;
-          cursor: pointer;
-          overflow: visible;
-          width: 24px;
-          height: 24px;
-          transition-duration: 0s;
-        }
+  coveo-map div#location-pin-details-modal .modal-dialog span.close-button a.close-modal {
+    margin: 15px 10px 0 0;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    box-sizing: border-box;
+    padding: 0;
+    background: #fff;
+    cursor: pointer;
+    overflow: visible;
+    width: 24px;
+    height: 24px;
+    transition-duration: 0s;
+  }
 
-      coveo-map div#location-pin-details-modal .modal-dialog .content #pin-details {
-        width: 100%;
-      }
+  coveo-map div#location-pin-details-modal .modal-dialog .content #pin-details {
+    width: 100%;
+  }
 }

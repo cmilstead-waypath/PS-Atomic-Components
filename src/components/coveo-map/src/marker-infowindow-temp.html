@@ -1,10 +1,11 @@
 <div id="pin-details">
   <div class="title"><h1>{{title}}</h1></div>
-  {{#if categories}}
-  <div class="facilitytype">
-    {{#each categories}}
-    <h4>{{this}}</h4>
-    {{/each}}
+  <div class="extra">
+    {{#if fieldA}}
+    <p>{{fieldA}}</p>
+    {{/if}}
+    {{#if fieldB}}
+    <p>{{fieldB}}</p>
+    {{/if}}
   </div>
-  {{/if}}
 </div>

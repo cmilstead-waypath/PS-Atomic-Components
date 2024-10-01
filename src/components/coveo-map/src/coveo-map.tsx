@@ -25,7 +25,7 @@ export class CoveoMap {
   private resultsListUnsubscribe: Unsubscribe = () => { };
   private statusUnsubscribe: Unsubscribe = () => { };
   private i18nUnsubscribe = () => { };
-  
+
   // Headless controller state property, using the `@State()` decorator.
   // Headless will automatically update these objects when the state related
   // to the controller has changed.
@@ -53,14 +53,15 @@ export class CoveoMap {
  */
   @Prop() hoverPinIcon: string;
   /**
- * A URL pointing to a template file for customizing the content of the info window.
- *
- * - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location.
- * - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array .
- * - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.
- *
- * Example: <div class="title">{{title}}
- */
+   * A URL pointing to a template file (.html) for customizing the content of the info window.
+   *
+   * - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location.
+   * - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array.
+   * - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template.
+   * - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.
+   *
+   * Example: `<div class="title">{{title}}</div>`
+   */
   @Prop() infoWindowTemplateUrl: string;
   /**
   * A valid Google API key to be used for rendering the Google Map.
@@ -73,7 +74,7 @@ export class CoveoMap {
    *
    * Default: { lat: 0, lng: 0 }
    */
-  @Prop() mapCenter: string; 
+  @Prop() mapCenter: string;
   /**
    * Allows the user to set the initial zoom level of the map.
   */
@@ -147,7 +148,7 @@ export class CoveoMap {
       await customElements.whenDefined('atomic-search-interface');
       // Wait for the Atomic bindings to be resolved.
       this.bindings = await initializeBindings(this.host);
-     
+
       // Initialize controllers.
       const statusController = buildSearchStatus(this.bindings.engine);
 
@@ -279,7 +280,7 @@ export class CoveoMap {
             position: pos
           };
 
-          this.addMarker(markerDataItem, result);       
+          this.addMarker(markerDataItem, result);
         }
         else {
           console.error("Failed to set Google Maps markers: latitude/longitude fields were not found.")
@@ -424,7 +425,7 @@ export class CoveoMap {
 
   private async addMarker(obj, result) {
     try {
-     
+
       let advancedMarker;
       let defaultMarker;
       let hoverMarker;

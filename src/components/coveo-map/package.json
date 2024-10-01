@@ -1,6 +1,8 @@
 {
   "name": "coveo-map",
-  "version": "0.0.1",
+  "description": "A custom Coveo Atomic component for displaying search results with geographic fields (latitude/longitude) on a Google Map.",
+  "homepage": "https://github.com/cmilstead-waypath/PS-Atomic-Components/tree/main/src/components/coveo-map",
+  "version": "1.0.0",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",

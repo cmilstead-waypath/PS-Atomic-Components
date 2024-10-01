@@ -25,7 +25,7 @@ export class CoveoMap {
   private resultsListUnsubscribe: Unsubscribe = () => { };
   private statusUnsubscribe: Unsubscribe = () => { };
   private i18nUnsubscribe = () => { };
-
+  
   // Headless controller state property, using the `@State()` decorator.
   // Headless will automatically update these objects when the state related
   // to the controller has changed.
@@ -60,9 +60,35 @@ export class CoveoMap {
    * - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template.
    * - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.
    *
-   * Example: `<div class="title">{{title}}</div>`
+   * Example:
+   * ```<div id="pin-details"><div class="title">{{title}}</div></div>```
    */
   @Prop() infoWindowTemplateUrl: string;
+  /**
+  * An inline HTML template string for customizing the content of the info window.
+  *
+  * - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array.
+  * - Only fields specified in the `fieldsToInclude` property will be available as placeholders in the template.
+  * - You can include conditional blocks using `{{#if field}}...{{/if}}` to render content only if the field is present.
+  * - Array fields can be iterated over using `{{#each arrayField}}...{{/each}}`, with `{{this}}` representing each item in the array.
+  * - This property takes precedence over `infoWindowTemplateUrl` if both are set.
+  *
+  * Example:
+  * ```html
+  * <div id="pin-details">
+  * <div class="title"><h1>{{title}}</h1></div>
+  * <div class="extra">
+  * {{#if fieldA}}
+  * <p>{{fieldA}}</p>
+  * {{/if}}
+  * {{#if fieldB}}
+  * <p>{{fieldB}}</p>
+  * {{/if}}
+  * </div>
+  * </div>
+  * ```
+  */
+  @Prop() infoWindowTemplate: string;
   /**
   * A valid Google API key to be used for rendering the Google Map.
   */
@@ -74,7 +100,7 @@ export class CoveoMap {
    *
    * Default: { lat: 0, lng: 0 }
    */
-  @Prop() mapCenter: string;
+  @Prop() mapCenter: string; 
   /**
    * Allows the user to set the initial zoom level of the map.
   */
@@ -148,7 +174,7 @@ export class CoveoMap {
       await customElements.whenDefined('atomic-search-interface');
       // Wait for the Atomic bindings to be resolved.
       this.bindings = await initializeBindings(this.host);
-
+     
       // Initialize controllers.
       const statusController = buildSearchStatus(this.bindings.engine);
 
@@ -280,7 +306,7 @@ export class CoveoMap {
             position: pos
           };
 
-          this.addMarker(markerDataItem, result);
+          this.addMarker(markerDataItem, result);       
         }
         else {
           console.error("Failed to set Google Maps markers: latitude/longitude fields were not found.")
@@ -425,7 +451,7 @@ export class CoveoMap {
 
   private async addMarker(obj, result) {
     try {
-
+     
       let advancedMarker;
       let defaultMarker;
       let hoverMarker;
@@ -605,7 +631,13 @@ export class CoveoMap {
   private async createInfoWindowContent(markerDataItem: any): Promise<string> {
     let templateContent = '';
 
-    if (this.infoWindowTemplateUrl) {
+    // Check if `infoWindowTemplate` is provided as a direct HTML string
+    if (this.infoWindowTemplate) {
+      // Use the provided template directly
+      templateContent = this.infoWindowTemplate;
+      templateContent = this.replacePlaceholders(templateContent, markerDataItem);
+    } else if (this.infoWindowTemplateUrl) {
+      // Fetch template from a URL if `infoWindowTemplateUrl` is provided
       try {
         const response = await fetch(this.infoWindowTemplateUrl);
         if (!response.ok) {
@@ -616,14 +648,12 @@ export class CoveoMap {
         templateContent = this.replacePlaceholders(templateContent, markerDataItem);
       } catch (error) {
         console.error('Error fetching template:', error);
+        // Use a fallback template if fetching fails
+        templateContent = `<div><h1>${markerDataItem.title}</h1></div>`;
       }
     } else {
-      // Fallback to default content if no template URL is provided
-      templateContent = `
-      <div>
-        <h1>${markerDataItem.title}</h1>      
-      </div>
-    `;
+      // Fallback to default content if no template is provided
+      templateContent = `<div><h1>${markerDataItem.title}</h1></div>`;
     }
 
     return templateContent;

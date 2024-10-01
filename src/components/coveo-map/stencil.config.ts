@@ -10,10 +10,11 @@ export const config: Config = {
     {
       type: 'dist-custom-elements',
     },
-    {
-      type: 'docs-readme',
-      dir: './',
-    },
+    /* To prevent automatic readme.md generation during build */
+    //{
+    //  type: 'docs-readme',
+    //  dir: './',
+    //},
     {
       type: 'docs-json',
       file: 'docs/stencil-docs.json',

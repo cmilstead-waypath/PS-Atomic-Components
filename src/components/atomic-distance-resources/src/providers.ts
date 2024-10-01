@@ -4,7 +4,7 @@ export class NavigatorPositionProvider {
     return new Promise((resolve, reject) => {
       // Setting options for the geolocation request
       const options: PositionOptions = {
-        timeout: 5000,             // Set timeout to 5 seconds
+        timeout: 10000,             // Set timeout to 10 seconds
         maximumAge: 900000,        // Set maximum age to 15 minutes
         enableHighAccuracy: false, // Set high accuracy to false
       };

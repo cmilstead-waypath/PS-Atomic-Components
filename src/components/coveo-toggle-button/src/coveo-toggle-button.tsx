@@ -70,7 +70,6 @@ export class CoveoToggleButton {
   public async connectedCallback() {
     try {
       this.result = await resultContext(this.host);
-      await this.loadIcon();
     } catch (error) {
       console.error(error);
       this.host.remove();
@@ -156,27 +155,35 @@ export class CoveoToggleButton {
   }
 
   private async loadIcon(): Promise<string | HTMLElement> {
-    // Check if the icon is a URL
-    if (this.icon.startsWith('http://') || this.icon.startsWith('https://') || this.icon.startsWith('./') || this.icon.startsWith('../')) {
-      try {
-        // Fetch the SVG content from the provided URL
+    const iconDiv = document.createElement('div');
+
+    try {
+      // Check if the icon is a valid URL (starts with http://, https://, ./, or ../)
+      if (this.icon.startsWith('http://') || this.icon.startsWith('https://') || this.icon.startsWith('./') || this.icon.startsWith('../')) {
+        // Fetch the SVG content from the URL
         const response = await fetch(this.icon);
         if (!response.ok) {
           throw new Error(`Failed to fetch SVG: ${response.statusText}`);
         }
+        // Get the SVG content as text
         const svgString = await response.text();
-        return svgString;
-      } catch (error) {
-        console.error('Error fetching SVG:', error);
-        return this.icon; // Fallback to showing the icon string as plain text if the fetch fails
+        iconDiv.innerHTML = svgString;
       }
+      // If the icon is a stringified SVG, use it directly
+      else if (this.icon.trim().startsWith('<svg')) {
+        iconDiv.innerHTML = this.icon;
+      }
+      // Handle other cases (invalid format)
+      else {
+        throw new Error('Invalid icon format. Must be a valid URL, assets path, or SVG string.');
+      }
+    } catch (error) {
+      console.error('Error fetching or setting SVG:', error);
+      // Optionally, set a fallback SVG or display an error
+      iconDiv.innerHTML = '<!-- SVG could not be loaded -->';
     }
-    // Check if the icon is a stringified SVG
-    else if (this.icon.trim().startsWith('<svg')) {
-      return this.icon;
-    }
-    // Return as plain text otherwise
-    return this.icon;
+
+    return iconDiv;
   }
 
   // Utility method to ensure the target element has a unique ID for aria-controls
@@ -236,7 +243,7 @@ export class CoveoToggleButton {
         aria-label={`${this.label}`}
         aria-expanded={this.isOpen.toString()}
         aria-controls={this.getTargetElementId()}
-      >{this.icon}</button>
+      >{this.loadIcon()}</button>
     );
   }
 }

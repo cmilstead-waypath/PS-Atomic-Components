@@ -1,26 +1,26 @@
-# Toggle Button
+# Coveo Toggle Button
 
-`toggle-button` is a customizable button component for use with Coveo Atomic that allows users to expand or collapse content sections via toggling a class named `open`. This component provides a simple and accessible way to toggle the visibility of any target element within a specified container, with support for custom styling and various icon formats.
+`coveo-toggle-button` is a customizable button component for use with Coveo Atomic that allows users to expand or collapse content sections via toggling a class named `open`. This component provides a simple and accessible way to toggle the visibility of any target element within a specified container, with support for custom styling and various icon formats.
 
 ## Installation
 You can install the component via npm:
 
 ```bash
-npm install toggle-button
+npm install coveo-toggle-button
 ```
 
 ## Usage
-To use the `toggle-button` component in your project, import it and include it in your HTML. Make sure to specify the appropriate attributes for customizing its behavior and appearance.
+To use the `coveo-toggle-button` component in your project, import it and include it in your HTML. Make sure to specify the appropriate attributes for customizing its behavior and appearance.
 
 ```html
 <div class="my-container">
-  <toggle-button
+  <coveo-toggle-button
     label="Toggle details"
     button-class="custom-toggle"
     container-selector=".my-container"
     target-selector=".details"
     icon="▼">
-  </toggle-button>
+  </coveo-toggle-button>
   <div class="details"></div>
 </div>
 ```
@@ -50,14 +50,14 @@ To use the `toggle-button` component in your project, import it and include it i
 
 ```html 
 <div class="my-container">
-  <toggle-button 
+  <coveo-toggle-button 
     label="Expand Section"
     button-class="custom-toggle"
     icon="https://example.com/my-icon.svg"
     container-selector=".my-container"
     target-selector=".section"
     is-open="true"
-  ></toggle-button>
+  ></coveo-toggle-button>
     <div class="section">
     <!-- The content to be shown/hidden on toggle -->
   </div>

@@ -1,8 +1,8 @@
 {
-  "name": "toggle-button",
+  "name": "coveo-toggle-button",
   "description": "A customizable toggle button for use with Coveo Atomic, allowing users to expand or collapse target content with accessibility features and flexible options for specifying container and target elements.",
-  "homepage": "https://github.com/cmilstead-waypath/PS-Atomic-Components/tree/main/src/components/toggle-button",
-  "version": "1.0.0",
+  "homepage": "https://github.com/cmilstead-waypath/PS-Atomic-Components/tree/main/src/components/coveo-toggle-button",
+  "version": "1.0.1",
   "main": "dist/index.cjs.js",
   "module": "dist/index.js",
   "es2015": "dist/esm/index.mjs",
@@ -10,8 +10,8 @@
   "types": "dist/types/components.d.ts",
   "collection": "dist/collection/collection-manifest.json",
   "collection:main": "dist/collection/index.js",
-  "unpkg": "dist/toggle-button/toggle-button.esm.js",
-  "elementName": "toggle-button",
+  "unpkg": "dist/coveo-toggle-button/coveo-toggle-button.esm.js",
+  "elementName": "coveo-toggle-button",
   "files": [
     "dist/",
     "loader/"

@@ -1,7 +1,7 @@
 import {Config} from '@stencil/core';
 import html from 'rollup-plugin-html';
 export const config: Config = {
-  namespace: 'toggle-button',
+  namespace: 'coveo-toggle-button',
   outputTargets: [
     {
       type: 'dist',
@@ -10,10 +10,10 @@ export const config: Config = {
     {
       type: 'dist-custom-elements',
     },
-    {
-      type: 'docs-readme',
-      dir: './',
-    },
+    //{
+    //  type: 'docs-readme',
+    //  dir: './',
+    //},
     {
       type: 'docs-json',
       file: 'docs/stencil-docs.json',

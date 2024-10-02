@@ -1,0 +1,15 @@
+.distance-panel #error-message {
+  color: #d9534f; /* Red color for error messages */
+  background-color: #f8d7da; /* Light red background for better visibility */
+  border: 1px solid #f5c6cb; /* Slightly darker border */
+  padding: 10px; /* Spacing around the text */
+  margin-top: 10px; /* Space above the message */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 14px; /* Consistent font size */
+  font-weight: bold; /* Make the error message stand out */
+  display: none; /* Hide by default */
+}
+
+  .distance-panel #error-message[aria-live="assertive"]:not(:empty) {
+    display: block; /* Show when the message has content */
+  }

@@ -1,0 +1,46 @@
+{
+  "name": "toggle-button",
+  "description": "A customizable toggle button for use with Coveo Atomic, allowing users to expand or collapse target content with accessibility features and flexible options for specifying container and target elements.",
+  "homepage": "",
+  "version": "1.0.0",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "es2015": "dist/esm/index.mjs",
+  "es2017": "dist/esm/index.mjs",
+  "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "collection:main": "dist/collection/index.js",
+  "unpkg": "dist/toggle-button/toggle-button.esm.js",
+  "elementName": "toggle-button",
+  "files": [
+    "dist/",
+    "loader/"
+  ],
+  "scripts": {
+    "prepublishOnly": "npm run build && atomic-meta-check && npm version patch",
+    "prebuild": "rimraf dist",
+    "build": "stencil build --docs",
+    "start": "stencil build --dev --watch --serve",
+    "test": "stencil test --spec --e2e",
+    "test.watch": "stencil test --spec --e2e --watchAll",
+    "generate": "stencil generate"
+  },
+  "dependencies": {
+    "@coveo/headless": "2.13.1",
+    "@coveo/atomic": "2.25.2",
+    "@stencil/core": "2.22.2"
+  },
+  "devDependencies": {
+    "@coveo/atomic-component-health-check": "2.2.17",
+    "@rollup/plugin-url": "8.0.1",
+    "@types/jest": "29.5.1",
+    "jest": "29.5.0",
+    "jest-cli": "29.5.0",
+    "rollup-plugin-html": "0.2.1",
+    "rimraf": "4.4.1"
+  },
+  "keywords": [
+    "coveo-atomic-component"
+  ],
+  "license": "Apache-2.0"
+}

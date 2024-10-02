@@ -3,11 +3,11 @@ import {resultContext} from '@coveo/atomic';
 import {Result} from '@coveo/headless';
 
 @Component({
-  tag: 'toggle-button',
-  styleUrl: 'toggle-button.css',
+  tag: 'coveo-toggle-button',
+  styleUrl: 'coveo-toggle-button.css',
   shadow: false,
 })
-export class ToggleButton {
+export class CoveoToggleButton {
   // The Headless result object to be resolved from the parent atomic-result component.
   @State() private result?: Result;
 

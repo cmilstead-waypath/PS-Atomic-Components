@@ -6,7 +6,7 @@
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
 export namespace Components {
-    interface ToggleButton {
+    interface CoveoToggleButton {
         /**
           * A custom class to be applied to the button element. This allows users to add their own CSS styles to customize the button's appearance. Example: "my-custom-toggle-button"
          */
@@ -34,18 +34,18 @@ export namespace Components {
     }
 }
 declare global {
-    interface HTMLToggleButtonElement extends Components.ToggleButton, HTMLStencilElement {
+    interface HTMLCoveoToggleButtonElement extends Components.CoveoToggleButton, HTMLStencilElement {
     }
-    var HTMLToggleButtonElement: {
-        prototype: HTMLToggleButtonElement;
-        new (): HTMLToggleButtonElement;
+    var HTMLCoveoToggleButtonElement: {
+        prototype: HTMLCoveoToggleButtonElement;
+        new (): HTMLCoveoToggleButtonElement;
     };
     interface HTMLElementTagNameMap {
-        "toggle-button": HTMLToggleButtonElement;
+        "coveo-toggle-button": HTMLCoveoToggleButtonElement;
     }
 }
 declare namespace LocalJSX {
-    interface ToggleButton {
+    interface CoveoToggleButton {
         /**
           * A custom class to be applied to the button element. This allows users to add their own CSS styles to customize the button's appearance. Example: "my-custom-toggle-button"
          */
@@ -72,14 +72,14 @@ declare namespace LocalJSX {
         "targetSelector": string;
     }
     interface IntrinsicElements {
-        "toggle-button": ToggleButton;
+        "coveo-toggle-button": CoveoToggleButton;
     }
 }
 export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "toggle-button": LocalJSX.ToggleButton & JSXBase.HTMLAttributes<HTMLToggleButtonElement>;
+            "coveo-toggle-button": LocalJSX.CoveoToggleButton & JSXBase.HTMLAttributes<HTMLCoveoToggleButtonElement>;
         }
     }
 }

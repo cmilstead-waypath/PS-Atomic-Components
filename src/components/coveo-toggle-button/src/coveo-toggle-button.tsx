@@ -1,6 +1,6 @@
-import {Component, h, State, Prop, Element} from '@stencil/core';
-import {resultContext} from '@coveo/atomic';
-import {Result} from '@coveo/headless';
+import { Component, h, State, Prop, Element } from '@stencil/core';
+import { resultContext } from '@coveo/atomic';
+import { Result } from '@coveo/headless';
 
 @Component({
   tag: 'coveo-toggle-button',
@@ -10,7 +10,7 @@ import {Result} from '@coveo/headless';
 export class CoveoToggleButton {
   // The Headless result object to be resolved from the parent atomic-result component.
   @State() private result?: Result;
-  @State() loadedIcon: HTMLElement | string | null = null;
+  @State() loadedIcon: string = ''; // Store as a string
 
   @Element() private host!: Element;
 
@@ -27,6 +27,7 @@ export class CoveoToggleButton {
    * Example: "my-custom-toggle-button"
    */
   @Prop() buttonClass: string = '';
+
   /**
    * A CSS selector string for the container element that holds the target to be toggled.
    * - If prefixed with `#`, it will be treated as an ID selector.
@@ -50,6 +51,7 @@ export class CoveoToggleButton {
    * Example: ".detail-wrapper", "#details", "detailWrapper"
    */
   @Prop() targetSelector!: string;
+
   /**
    * Defines the initial open state of the button and the target element.
    * If true, the button and target element will be rendered with the "open" class.
@@ -58,12 +60,12 @@ export class CoveoToggleButton {
   @Prop({ reflect: true }) isOpen: boolean = false;
 
   /**
- * Sets the icon to be displayed inside the button.
- * - The icon can be any string, emoji, or character entity.
- * - If provided as a URL (starting with `http://`, `https://`, `./`, or `../`), the button will fetch and display the SVG from that location.
- * - If the icon is a stringified SVG (starts with `<svg`), it will be directly rendered within the button.
- * Example: "▼", "►", `<svg ...>`, or a URL like "https://example.com/icon.svg"
- */
+   * Sets the icon to be displayed inside the button.
+   * - The icon can be any string, emoji, or character entity.
+   * - If provided as a URL (starting with `http://`, `https://`, `./`, `../`, or `/`), the button will fetch and display the SVG from that location.
+   * - If the icon is a stringified SVG (starts with `<svg`), it will be directly rendered within the button.
+   * Example: "▼", "►", `<svg ...>`, or a URL like "https://example.com/icon.svg"
+   */
   @Prop() icon!: string;
 
   // We recommended fetching the result context using the `connectedCallback` lifecycle method
@@ -78,11 +80,11 @@ export class CoveoToggleButton {
     }
   }
 
-   componentDidLoad() {
+  componentDidLoad() {
     const button = this.host.querySelector('button');
     if (button) {
       button.classList.toggle('open', this.isOpen);
-     
+
       if ('ontouchstart' in window || navigator.maxTouchPoints) {
         button.addEventListener('touchstart', this.handleButtonClick.bind(this));
       } else {
@@ -158,38 +160,40 @@ export class CoveoToggleButton {
 
   private async loadIcon(): Promise<void> {
     if (!this.icon) {
-      this.loadedIcon = null;
+      this.loadedIcon = '';
       return;
     }
 
-    const iconDiv = document.createElement('div');
     try {
       // Check if the icon is a valid URL
-      if (this.icon.startsWith('http://') || this.icon.startsWith('https://') || this.icon.startsWith('./') || this.icon.startsWith('../')) {
+      if (
+        this.icon.startsWith('http://') ||
+        this.icon.startsWith('https://') ||
+        this.icon.startsWith('./') ||
+        this.icon.startsWith('../') ||
+        this.icon.startsWith('/')
+      ) {
         // Fetch the SVG content from the URL
         const response = await fetch(this.icon);
         if (!response.ok) {
           throw new Error(`Failed to fetch SVG: ${response.statusText}`);
         }
         // Get the SVG content as text
-        const svgString = await response.text();
-        iconDiv.innerHTML = svgString;
+        this.loadedIcon = await response.text();
       }
       // If the icon is a stringified SVG, use it directly
       else if (this.icon.trim().startsWith('<svg')) {
-        iconDiv.innerHTML = this.icon;
+        this.loadedIcon = this.icon;
       }
-      // Handle other cases (invalid format)
+      // Otherwise, handle plain strings, emojis, or character entities
       else {
-        throw new Error('Invalid icon format. Must be a valid URL, assets path, or SVG string.');
+        this.loadedIcon = this.icon; // Render the icon as plain text
       }
     } catch (error) {
-      console.error('Error fetching or setting SVG:', error);
+      console.error('Error fetching or setting the icon:', error);
       // Optionally, set a fallback SVG or display an error
-      iconDiv.innerHTML = '<!-- SVG could not be loaded -->';
+      this.loadedIcon = '<!-- Icon could not be loaded -->';
     }
-
-    this.loadedIcon = iconDiv;
   }
 
   // Utility method to ensure the target element has a unique ID for aria-controls
@@ -249,7 +253,8 @@ export class CoveoToggleButton {
         aria-label={`${this.label}`}
         aria-expanded={this.isOpen.toString()}
         aria-controls={this.getTargetElementId()}
-      >{this.loadedIcon}</button>
+        innerHTML={this.loadedIcon ?? ''} // Use innerHTML to render the SVG
+      ></button>
     );
   }
 }

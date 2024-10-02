@@ -10,6 +10,7 @@ import {Result} from '@coveo/headless';
 export class CoveoToggleButton {
   // The Headless result object to be resolved from the parent atomic-result component.
   @State() private result?: Result;
+  @State() loadedIcon: HTMLElement | string | null = null;
 
   @Element() private host!: Element;
 
@@ -70,6 +71,7 @@ export class CoveoToggleButton {
   public async connectedCallback() {
     try {
       this.result = await resultContext(this.host);
+      await this.loadIcon();
     } catch (error) {
       console.error(error);
       this.host.remove();
@@ -154,11 +156,15 @@ export class CoveoToggleButton {
     this.isOpen = !this.isOpen; // Keep track of open state
   }
 
-  private async loadIcon(): Promise<string | HTMLElement> {
-    const iconDiv = document.createElement('div');
+  private async loadIcon(): Promise<void> {
+    if (!this.icon) {
+      this.loadedIcon = null;
+      return;
+    }
 
+    const iconDiv = document.createElement('div');
     try {
-      // Check if the icon is a valid URL (starts with http://, https://, ./, or ../)
+      // Check if the icon is a valid URL
       if (this.icon.startsWith('http://') || this.icon.startsWith('https://') || this.icon.startsWith('./') || this.icon.startsWith('../')) {
         // Fetch the SVG content from the URL
         const response = await fetch(this.icon);
@@ -183,7 +189,7 @@ export class CoveoToggleButton {
       iconDiv.innerHTML = '<!-- SVG could not be loaded -->';
     }
 
-    return iconDiv;
+    this.loadedIcon = iconDiv;
   }
 
   // Utility method to ensure the target element has a unique ID for aria-controls
@@ -243,7 +249,7 @@ export class CoveoToggleButton {
         aria-label={`${this.label}`}
         aria-expanded={this.isOpen.toString()}
         aria-controls={this.getTargetElementId()}
-      >{this.loadIcon()}</button>
+      >{this.loadedIcon}</button>
     );
   }
 }

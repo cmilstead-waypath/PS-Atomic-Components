@@ -25,9 +25,9 @@
     "generate": "stencil generate"
   },
   "dependencies": {
-    "@coveo/headless": "2.13.1",
-    "@coveo/atomic": "2.25.2",
-    "@stencil/core": "2.22.2",
+    "@coveo/headless": "^2.13.1",
+    "@coveo/atomic": "^2.25.2",
+    "@stencil/core": "^2.22.2",
     "@googlemaps/js-api-loader": "^1.16.8",
     "@types/google.maps": "^3.58.0"
   },

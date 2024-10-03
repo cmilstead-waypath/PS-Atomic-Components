@@ -27,7 +27,6 @@ To use the `coveo-toggle-button` component in your project, import it and includ
 
 <!-- Auto Generated Below -->
 
-
 ## Properties
 
 | Property                         | Attribute            | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | Type      | Default            |
@@ -38,7 +37,6 @@ To use the `coveo-toggle-button` component in your project, import it and includ
 | `isOpen`                         | `is-open`            | Defines the initial open state of the button and the target element. If true, the button and target element will be rendered with the "open" class. Example: true or false                                                                                                                                                                                                                                                                                                                                                      | `boolean` | `false`            |
 | `label`                          | `label`              | Sets the accessible label for the button. This label is used for screen readers to describe the button's purpose. Example: "Toggle Details"                                                                                                                                                                                                                                                                                                                                                                                     | `string`  | `'Toggle Details'` |
 | `targetSelector` _(required)_    | `target-selector`    | A CSS selector string for the target element within the container that will be toggled. - If prefixed with `#`, it will be treated as an ID selector. - If prefixed with `.`, it will be treated as a class selector. - If no prefix is provided, it will first try to match an element by ID within the container, and if none is found, it will attempt to match a class name.  When the button is clicked, the "open" class will be toggled on this target element.  Example: ".detail-wrapper", "#details", "detailWrapper" | `string`  | `undefined`        |
-
 
 ## Accessibility
 
@@ -73,6 +71,7 @@ In this example:
 ## Customization & Theming
 
 * Use the `buttonClass` property to apply your own styles to the button. The icon property allows for custom icons, including SVGs or text. By setting the containerSelector and targetSelector, you have complete control over what content is toggled.
+
 ----------------------------------------------
 
 *Built with [StencilJS](https://stenciljs.com/)*

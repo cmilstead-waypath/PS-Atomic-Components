@@ -25,7 +25,7 @@ export class CoveoMap {
   private resultsListUnsubscribe: Unsubscribe = () => { };
   private statusUnsubscribe: Unsubscribe = () => { };
   private i18nUnsubscribe = () => { };
-  
+
   // Headless controller state property, using the `@State()` decorator.
   // Headless will automatically update these objects when the state related
   // to the controller has changed.
@@ -46,7 +46,7 @@ export class CoveoMap {
   /**
  * The SVG icon used for the custom pin icon's hover state, replacing the `pinIcon` content on `mouseenter`.
  *
- * - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch and display the icon from an external location.
+ * - Use a value that starts with `http://`, `https://`, `/`, `./`, or `../` to fetch and display the icon from an external location.
  * - Use a stringified SVG to render it directly.
  * 
  * Note: This icon will only be rendered if `pinIcon` is also set.
@@ -55,7 +55,7 @@ export class CoveoMap {
   /**
    * A URL pointing to a template file (.html) for customizing the content of the info window.
    *
-   * - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch the template from a given location.
+   * - Use a value that starts with `http://`, `https://`, `/`, `./`, or `../` to fetch the template from a given location.
    * - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array.
    * - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template.
    * - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.
@@ -100,7 +100,7 @@ export class CoveoMap {
    *
    * Default: { lat: 0, lng: 0 }
    */
-  @Prop() mapCenter: string; 
+  @Prop() mapCenter: string;
   /**
    * Allows the user to set the initial zoom level of the map.
   */
@@ -174,7 +174,7 @@ export class CoveoMap {
       await customElements.whenDefined('atomic-search-interface');
       // Wait for the Atomic bindings to be resolved.
       this.bindings = await initializeBindings(this.host);
-     
+
       // Initialize controllers.
       const statusController = buildSearchStatus(this.bindings.engine);
 
@@ -306,7 +306,7 @@ export class CoveoMap {
             position: pos
           };
 
-          this.addMarker(markerDataItem, result);       
+          this.addMarker(markerDataItem, result);
         }
         else {
           console.error("Failed to set Google Maps markers: latitude/longitude fields were not found.")
@@ -322,136 +322,9 @@ export class CoveoMap {
     }
   }
 
-  //private addMarker(obj) {
-  //  try {
-  //    var content = "<div id=\"pin-details\">",
-  //      infoBubbleTitle = `<div class=\"title\"><h1>${obj.title}</h1></div>`,
-  //      infoBubbleAddress = '',
-  //      infoBubbleCategories = '',
-  //      infoBubblePhone = '',
-  //      infoBubbleDirections = obj.directionUri;
-
-  //    if (!obj.address?.includes("<div class=\"address\">")) {
-  //      var address = `<div class="address">${obj.address}</div>`;
-  //      infoBubbleAddress = address;
-  //    } else {
-  //      infoBubbleAddress = obj.address;
-  //    }
-
-  //    if (obj.categories[1] || obj.categories[2]) {
-  //      infoBubbleCategories = `<div class="categories">`;
-  //      if (obj.categories[1]) {
-  //        for (var i = 0; i < obj.categories[1].length; i++)
-  //          infoBubbleCategories += `<h4>${obj.categories[1][i]}</h4>`;
-  //      }
-  //      if (obj.categories[2]) {
-  //        for (var i = 0; i < obj.categories[2].length; i++)
-  //          infoBubbleCategories += `<h4>${obj.categories[2][i]}</h4>`;
-  //      }
-  //      infoBubbleCategories += '</div>';
-  //    }
-
-  //    if (obj.phone)
-  //      infoBubblePhone = `<a class="phone" href="tel:${obj.phone}">${obj.phone}</a>`;
-
-  //    content += infoBubbleTitle;
-
-  //    if (obj.showAddress == 1) content += infoBubbleAddress;
-  //    if (infoBubbleCategories != '') content += infoBubbleCategories;
-  //    if (infoBubblePhone != '') content += infoBubblePhone;
-  //    if (obj.showAddress == 1) content += infoBubbleDirections;
-  //    content += "</div>";
-
-  //    //// Assuming nMarker is the marker number, which we want to use as a glyph
-  //    //const pinView = new google.maps.marker.PinElement({
-  //    //  //glyph: nMarker.toString(),  // Use the marker number or any glyph you want
-  //    //  glyphColor: 'white',        // Set the color of the text or glyph
-  //    //  background: '#FF0000',      // Customize the background color (or set it to match your SVG color)
-  //    //  scale: 1.5                  // Adjust the scale for the size
-  //    //});
-
-  //    // Create an HTML element that contains the SVG
-  //    const defaultMarker = document.createElement('div');
-  //    defaultMarker.innerHTML = `<img src="/public/westrock/images/locations-map-marker.svg" width="26" height="42" />`;
-
-  //    const hoverMarker = document.createElement('div');
-  //    hoverMarker.innerHTML = `<img src="/public/westrock/images/locations-map-marker-hover.svg" width="26" height="42" />`;
-
-
-  //    // Create the AdvancedMarkerElement with the default marker
-  //    const advancedMarker = new google.maps.marker.AdvancedMarkerElement({
-  //      position: obj.position,
-  //      map: this.map,
-  //      title: obj.title,
-  //      gmpClickable: true,
-  //      content: defaultMarker, // Set default marker content
-  //    });
-
-  //    // Add event listeners to the default marker DOM element
-  //    defaultMarker.addEventListener('mouseenter', () => {
-  //      advancedMarker.content = hoverMarker;  // Set the hover state content
-  //    });
-
-  //    defaultMarker.addEventListener('mouseleave', () => {
-  //      advancedMarker.content = defaultMarker;  // Revert to default marker
-  //    });
-
-  //    hoverMarker.addEventListener('mouseleave', () => {
-  //      advancedMarker.content = defaultMarker;
-  //    });
-
-  //    // Marker click listener
-  //    advancedMarker.addListener('click', () => {
-  //      const isMobile: boolean = window.screen.availWidth < 768;
-  //      if (isMobile) {
-  //        const locationModal: HTMLElement | null = document.getElementById('location-pin-details-modal');
-  //        if (locationModal) {
-  //          locationModal.classList.add('open');
-  //          const contentContainer: Element | null = locationModal.querySelector('.content');
-  //          if (contentContainer) {
-  //            contentContainer.innerHTML = content;
-  //            // Select any link within the content and blur it to remove focus
-  //            const link = contentContainer.querySelector('a');
-  //            if (link) {
-  //              link.blur();
-  //            }
-  //          }
-  //        }
-  //      } else {
-  //        this.infoWindow.setContent(content);
-  //        this.infoWindow.open(this.map, advancedMarker);
-  //        this.map.panTo(advancedMarker.position);
-  //        this.map.setCenter(advancedMarker.position);
-
-  //        //blur the first 'a' element
-  //        const pinDetails: HTMLElement | null = document.getElementById('pin-details');
-  //        if (pinDetails) {
-  //          const link: HTMLElement | null = pinDetails.querySelector('a');
-  //          if (link) {
-  //            link.blur();
-  //          }
-  //        }
-  //      }
-  //    });
-
-  //    this.map.addListener('click', () => {
-  //      if (window.screen.availWidth >= 768) {
-  //        this.infoWindow.close();
-  //        this.map.setCenter(this.bounds.getCenter());
-  //        this.map.fitBounds(this.bounds);
-  //      }
-  //    });
-
-  //    this.markers.push(advancedMarker);
-  //  } catch (error) {
-  //    console.error(error);
-  //    this.error = error as Error;
-  //  }
-  //}
-
   private async addMarker(obj, result) {
     try {
-     
+
       let advancedMarker;
       let defaultMarker;
       let hoverMarker;
@@ -664,7 +537,11 @@ export class CoveoMap {
 
     try {
       // Check if the icon is a valid URL (starts with http://, https://, ./, or ../)
-      if (icon.startsWith('http://') || icon.startsWith('https://') || icon.startsWith('./') || icon.startsWith('../')) {
+      if (icon.startsWith('http://') ||
+        icon.startsWith('https://') ||
+        icon.startsWith('./') ||
+        icon.startsWith('../') ||
+        icon.startsWith('/')) {
         // Fetch the SVG content from the URL
         const response = await fetch(icon);
         if (!response.ok) {

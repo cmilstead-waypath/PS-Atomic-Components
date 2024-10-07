@@ -214,31 +214,29 @@ export class CoveoToggleButton {
         document.querySelector(`.${this.containerSelector}`);
     }
 
-    if (!containerElement) {
-      console.warn(`Container element with selector "${this.containerSelector}" not found.`);
-      return;
-    }
+    if (containerElement) {
+      // Determine whether targetSelector is an ID or class
+      let targetElement;
+      if (this.targetSelector.startsWith('#')) {
+        // If it starts with '#', treat it as an ID
+        targetElement = containerElement.querySelector(this.targetSelector) ||
+          document.getElementById(this.targetSelector.substring(1));
+      } else if (this.targetSelector.startsWith('.')) {
+        // If it starts with '.', treat it as a class
+        targetElement = containerElement.querySelector(this.targetSelector);
+      } else {
+        // If no prefix, try both ID and class
+        targetElement = containerElement.querySelector(`#${this.targetSelector}`) ||
+          containerElement.querySelector(`.${this.targetSelector}`) ||
+          document.getElementById(this.targetSelector);
+      }
 
-    // Determine whether targetSelector is an ID or class
-    let targetElement;
-    if (this.targetSelector.startsWith('#')) {
-      // If it starts with '#', treat it as an ID
-      targetElement = containerElement.querySelector(this.targetSelector) ||
-        document.getElementById(this.targetSelector.substring(1));
-    } else if (this.targetSelector.startsWith('.')) {
-      // If it starts with '.', treat it as a class
-      targetElement = containerElement.querySelector(this.targetSelector);
-    } else {
-      // If no prefix, try both ID and class
-      targetElement = containerElement.querySelector(`#${this.targetSelector}`) ||
-        containerElement.querySelector(`.${this.targetSelector}`) ||
-        document.getElementById(this.targetSelector);
+      if (targetElement && !targetElement.id) {
+        targetElement.id = `toggle-button-target-${Math.random().toString(36).substr(2, 9)}`;
+      }
+      return targetElement ? targetElement.id : '';
     }
-
-    if (targetElement && !targetElement.id) {
-      targetElement.id = `toggle-button-target-${Math.random().toString(36).substr(2, 9)}`;
-    }
-    return targetElement ? targetElement.id : '';
+    return null;
   }
 
   public render() {

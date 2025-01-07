@@ -185,18 +185,17 @@ export class CoveoMap {
 
       this.registerIncludedFields();
 
+      // Initialize the ResultList controller
       this.resultsListController = buildResultList(this.bindings.engine, {
         options: { fieldsToInclude: this.includedFields },
       });
+    
+      this.resultsListUnsubscribe = this.resultsListController.subscribe(() => {
+        this.resultsListState = this.resultsListController.state;
+        this.initializeMapData();
+      });
 
-      this.resultsListUnsubscribe = this.resultsListController.subscribe(
-        () => (this.resultsListState = this.resultsListController.state,
-          this.initializeMapData())
-      );
-
-      // (Optional) To use if component needs to rerender when the Atomic i18n language changes.
-      // If your component does not use any strings or does not support multiple languages,
-      // you can ignore everything related to i18n.
+      // Handle language changes for Atomic i18n
       const updateLanguage = () => forceUpdate(this);
       this.bindings.i18n.on('languageChanged', updateLanguage);
       this.i18nUnsubscribe = () =>
@@ -282,8 +281,10 @@ export class CoveoMap {
 
       // Clear existing markers
       this.markers.forEach(marker => {
-        marker.map = null; // Removes the marker from the map
+        marker.position = null; // Remove marker position so it doesn't appear on map
+        marker.map = null; // Explicitly remove marker from the map
       });
+
       this.markers = [];
 
       this.bounds = new google.maps.LatLngBounds();
@@ -297,13 +298,11 @@ export class CoveoMap {
 
           // Extend the bounds to include this position
           this.bounds.extend(position);
-          var title = result.raw.title;
-          var pos = new google.maps.LatLng(latitude, longitude);
 
-          // Use the content as needed, e.g., for an info window
-          var markerDataItem = {
-            title: title,
-            position: pos
+          // Add a new marker
+          const markerDataItem = {
+            title: result.raw.title,
+            position: position,
           };
 
           this.addMarker(markerDataItem, result);
@@ -313,9 +312,12 @@ export class CoveoMap {
         }
       });
 
-      // Adjust the map view so that all markers are visible within the viewport
-      this.map.fitBounds(this.bounds);
-
+      // Adjust the map view so all markers are visible
+      if (this.bounds.isEmpty()) {
+        console.warn("No valid markers to display on the map.");
+      } else {
+        this.map.fitBounds(this.bounds);
+      }
     } catch (error) {
       console.error(error);
       this.error = error as Error;

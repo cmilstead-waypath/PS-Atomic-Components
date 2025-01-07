@@ -189,10 +189,13 @@ export class CoveoMap {
       this.resultsListController = buildResultList(this.bindings.engine, {
         options: { fieldsToInclude: this.includedFields },
       });
-    
+
+      // Apply debouncing to the initializeMapData method
+      const debouncedInitializeMapData = this.debounce(this.initializeMapData.bind(this), 300);
+
       this.resultsListUnsubscribe = this.resultsListController.subscribe(() => {
         this.resultsListState = this.resultsListController.state;
-        this.initializeMapData();
+        debouncedInitializeMapData();
       });
 
       // Handle language changes for Atomic i18n
@@ -237,6 +240,15 @@ export class CoveoMap {
     this.resultsListUnsubscribe();
     this.statusUnsubscribe();
     this.i18nUnsubscribe();
+  }
+
+  private debounce(func: Function, delay: number): Function {
+    let timeout: NodeJS.Timeout;
+    return function (...args: any[]) {
+      const context = this;
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(context, args), delay);
+    };
   }
 
   private initializeMap() {

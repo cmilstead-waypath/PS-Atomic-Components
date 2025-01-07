@@ -32,6 +32,10 @@ export class AtomicDistanceResources {
 
   @Element() private element!: HTMLElement;
 
+  private firstSearchCompleted: boolean = false;
+  private pendingApplyGeospatialFilter = false;
+  private isSearchInProgress: boolean = false;
+
   // Headless controller state property, using the `@State()` decorator.
   // Headless will automatically update these objects when the state related
   // to the controller has changed.
@@ -82,6 +86,12 @@ export class AtomicDistanceResources {
     */
   @Prop() geospatialDistances!: string[] | string;
 
+  private debouncedSearch: () => void;
+
+  constructor() {
+    this.debouncedSearch = this.debounce(() => this.executeSearchWithChecks(), 300);
+  }
+
   componentWillLoad() {
     this.registerDistanceValues();
   }
@@ -110,12 +120,20 @@ export class AtomicDistanceResources {
       const providers = this.getProvidersFromOptions();
       await this.tryToSetPositionFromProviders(providers);
     } catch (error) {
-      console.error(error);
-      this.error = error as Error;
+      if (error.name !== "AbortError") {
+        console.error(error);
+        this.error = error as Error;
+      }
+    }
 
-      // Fallback to trigger the search even if an error occurs
-      if (this.searchEngine) {
-        this.searchEngine.executeFirstSearch();
+    // Ensure executeFirstSearch is completed before any further actions
+    if (this.searchEngine) {
+      this.firstSearchCompleted = true;
+
+      // If applyGeospatialFilter was called before firstSearchCompleted, execute it now
+      if (this.pendingApplyGeospatialFilter) {
+        this.applyGeospatialFilter();
+        this.pendingApplyGeospatialFilter = false;
       }
     }
   }
@@ -126,19 +144,13 @@ export class AtomicDistanceResources {
     this.statusUnsubscribe();
   }
 
-  /**
- * Overrides the current position with the provided values.
- *
- * **Note:**
- * > Calling this method does not automatically trigger a query.
- *
- * @param latitude The latitude to set.
- * @param longitude The longitude to set.
- */
   public setPosition(latitude: number, longitude: number): void {
-    this.latitude = latitude;
-    this.longitude = longitude;
-    this.applyGeospatialFilter();
+    // Only update and trigger the search if the position actually changes
+    if (latitude !== this.latitude || longitude !== this.longitude) {
+      this.latitude = latitude;
+      this.longitude = longitude;
+      this.applyGeospatialFilter();
+    }
   }
 
   private getLatLngCookie() {
@@ -165,8 +177,6 @@ export class AtomicDistanceResources {
       }
       this.setPosition(this.defaultLatitude, this.defaultLongitude);
     }
-    // Default behavior: Execute the first search
-    this.searchEngine.executeFirstSearch();
   }
 
   private async tryGetPositionFromProviders(providers: IGeolocationPositionProvider[]): Promise<IGeolocationPosition | null> {
@@ -230,16 +240,52 @@ export class AtomicDistanceResources {
       // Dispatch the action to update the advanced query
       this.searchEngine.dispatch(action1);
 
-      // Explicitly execute a new search
+      // Call the debounced search function
+      this.debouncedSearch();
+
+    } catch (error) {
+      console.error("Failed to apply distance sorting", error);
+    }
+  }
+
+  private async executeSearchWithChecks() {
+    // If a search is already in progress, do not execute a new one
+    if (this.isSearchInProgress) {
+      console.warn("Search is already in progress. Aborting additional search execution.");
+      return;
+    }
+
+    // If the first search is not yet completed, mark as pending and return
+    if (!this.firstSearchCompleted) {
+      console.warn("Attempt to execute a search before the first search was completed.");
+      this.pendingApplyGeospatialFilter = true;
+      return;
+    }
+
+    this.isSearchInProgress = true;
+
+    try {
       const { executeSearch } = loadSearchActions(this.searchEngine);
       const { logInterfaceLoad } = loadSearchAnalyticsActions(this.searchEngine);
 
-      // Dispatch the action with an analytics event
-      this.searchEngine.dispatch(executeSearch(logInterfaceLoad()));
+      // Dispatch the action and wait for the search to complete
+      await this.searchEngine.dispatch(executeSearch(logInterfaceLoad()));
     } catch (error) {
-      //this.error = error as Error;
-      console.error("Failed to apply distance sorting", error);
+      if (error.name !== "AbortError") {
+        console.error("Search failed with an unexpected error:", error);
+      }
+    } finally {
+      // Reset the lock after the search completes
+      this.isSearchInProgress = false;
     }
+  }
+
+  private debounce<T extends (...args: any[]) => void>(func: T, wait: number): (...args: Parameters<T>) => void {
+    let timeout: ReturnType<typeof setTimeout>;
+    return function (...args: Parameters<T>) {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, args), wait);
+    };
   }
 
   private async resolveLocationToCoordinates(location: string): Promise<{ latitude: number, longitude: number }> {

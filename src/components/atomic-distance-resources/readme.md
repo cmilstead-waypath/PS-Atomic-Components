@@ -11,9 +11,9 @@
  
 The `atomic-distance-resources` component provides a flexible way to apply geospatial filtering to search results. It includes:
 
-* A distance field selector: A customizable dropdown that allows users to choose a distance range from a set of predefined values (e.g., 25 miles, 50 miles, etc.). The distance options are easily customizable via a geospatialDistances property. Note: This field will only render if the geospatialDistances property is set.
-* A unit switcher: Users can toggle between miles and kilometers for distance measurements.
-* A location input field: An input box where users can enter a city name or postal code to set a new search position, providing a more precise geospatial filter. Note: This field will only render if the googleApiKey property is set. 
+* **A distance field selector**: A customizable dropdown that allows users to choose a distance range from a set of predefined values (e.g., 25 miles, 50 miles, etc.). The distance options are easily customizable via a `geospatialDistances` property. **Note**: This field will only render if the `geospatialDistances` property is set.
+* **A unit switcher**: Users can toggle between miles and kilometers for distance measurements.
+* **A location input field**: An input box where users can enter a city name or postal code to set a new search position, providing a more precise geospatial filter. **Note**: This field will only render if the `googleApiKey` property is set. 
 
 This component is ideal for enabling location-based searches and refining search results based on proximity to a specified location.
 

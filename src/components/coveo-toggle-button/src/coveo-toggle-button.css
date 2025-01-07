@@ -1,0 +1,22 @@
+/*toggle-button {
+    margin-left: auto;
+}
+
+button.dropdown-arrow::before {
+  display: inline-block;
+  font: var(--fa-font-sharp-regular);
+  font-weight: 100;
+  content: "\f107";
+  color: #909298;
+  font-size: 1.875rem;
+  cursor: pointer;
+  transition: all .3s;
+}
+
+button.dropdown-arrow.open::before {
+  transform: rotate(180deg);
+}
+
+button.dropdown-arrow {
+    display: block;
+}*/

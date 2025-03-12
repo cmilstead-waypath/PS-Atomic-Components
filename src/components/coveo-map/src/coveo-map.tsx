@@ -385,7 +385,7 @@ export class CoveoMap {
       }
 
       // Add a click event listener to the marker
-      advancedMarker.addListener('click', async () => {
+      advancedMarker.addListener('gmp-click', async () => {
         const windowContent = await this.createInfoWindowContent(result);
         const isMobile: boolean = window.screen.availWidth < 768;
         if (isMobile) {

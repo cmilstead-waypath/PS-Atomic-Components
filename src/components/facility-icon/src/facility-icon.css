@@ -1,0 +1,13 @@
+.search-result-icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+}
+
+.search-result-icon::before {
+  content: '';
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  display: block;
+}

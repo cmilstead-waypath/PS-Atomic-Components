@@ -1,0 +1,45 @@
+{
+  "timestamp": "2025-06-20T15:21:40",
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "2.22.2",
+    "typescriptVersion": "4.9.4"
+  },
+  "components": [
+    {
+      "filePath": "./src/facility-icon.tsx",
+      "encapsulation": "none",
+      "tag": "facility-icon",
+      "docs": "Sample custom Atomic result component, to be used inside an Atomic Result Template.\r\n\r\nThis component showcases a component that conditionally renders the author of a result, with a fallback to display \"anonymous\" in the event that no author is available for a document, for educational purposes.\r\n\r\nIn a real life scenario, we recommend using [result-field-condition](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-field-condition/) and [atomic-result-text](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-result-text/).",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "field",
+          "type": "string",
+          "mutable": false,
+          "attr": "field",
+          "reflectToAttr": false,
+          "docs": "",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    }
+  ]
+}

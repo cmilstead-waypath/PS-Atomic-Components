@@ -1,0 +1,129 @@
+{
+  "timestamp": "2025-06-20T15:20:34",
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "2.22.2",
+    "typescriptVersion": "4.9.4"
+  },
+  "components": [
+    {
+      "filePath": "./src/coveo-toggle-button.tsx",
+      "encapsulation": "none",
+      "tag": "coveo-toggle-button",
+      "readme": "# toggle-button\r\n\r\n\r\n\r",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "buttonClass",
+          "type": "string",
+          "mutable": false,
+          "attr": "button-class",
+          "reflectToAttr": false,
+          "docs": "A custom class to be applied to the button element.\r\nThis allows users to add their own CSS styles to customize the button's appearance.\r\nExample: \"my-custom-toggle-button\"",
+          "docsTags": [],
+          "default": "''",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "containerSelector",
+          "type": "string",
+          "mutable": false,
+          "attr": "container-selector",
+          "reflectToAttr": false,
+          "docs": "A CSS selector string for the container element that holds the target to be toggled.\r\n- If prefixed with `#`, it will be treated as an ID selector.\r\n- If prefixed with `.`, it will be treated as a class selector.\r\n- If no prefix is provided, it will first try to match an element by ID, and if none is found, it will attempt to match a class name.\r\n\r\nDefault: \".search-container\"\r\n\r\nExample: \".result-container\", \"#myContainer\", \"container\"",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "mutable": false,
+          "attr": "icon",
+          "reflectToAttr": false,
+          "docs": "Sets the icon to be displayed inside the button.\r\n- The icon can be any string, emoji, or character entity.\r\n- If provided as a URL (starting with `http://`, `https://`, `./`, `../`, or `/`), the button will fetch and display the SVG from that location.\r\n- If the icon is a stringified SVG (starts with `<svg`), it will be directly rendered within the button.\r\nExample: \"▼\", \"►\", `<svg ...>`, or a URL like \"https://example.com/icon.svg\"",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true
+        },
+        {
+          "name": "isOpen",
+          "type": "boolean",
+          "mutable": false,
+          "attr": "is-open",
+          "reflectToAttr": true,
+          "docs": "Defines the initial open state of the button and the target element.\r\nIf true, the button and target element will be rendered with the \"open\" class.\r\nExample: true or false",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": false,
+          "docs": "Sets the accessible label for the button.\r\nThis label is used for screen readers to describe the button's purpose.\r\nExample: \"Toggle Details\"",
+          "docsTags": [],
+          "default": "'Toggle Details'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "targetSelector",
+          "type": "string",
+          "mutable": false,
+          "attr": "target-selector",
+          "reflectToAttr": false,
+          "docs": "A CSS selector string for the target element within the container that will be toggled.\r\n- If prefixed with `#`, it will be treated as an ID selector.\r\n- If prefixed with `.`, it will be treated as a class selector.\r\n- If no prefix is provided, it will first try to match an element by ID within the container, and if none is found, it will attempt to match a class name.\r\n\r\nWhen the button is clicked, the \"open\" class will be toggled on this target element.\r\n\r\nExample: \".detail-wrapper\", \"#details\", \"detailWrapper\"",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    }
+  ]
+}

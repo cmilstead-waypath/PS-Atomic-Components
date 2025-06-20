@@ -5,9 +5,202 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
+import { FacetSortCriterion } from "@coveo/headless";
 export namespace Components {
     interface AddToCart {
         "callbackFunction": string;
+    }
+    interface AtomicDistanceResources {
+        /**
+          * The default latitude value to be used if no other location is provided.
+         */
+        "defaultLatitude": number;
+        /**
+          * The default longitude value to be used if no other location is provided.
+         */
+        "defaultLongitude": number;
+        /**
+          * Specifies the name of the field in which to store the distance value.
+         */
+        "distanceField": string;
+        /**
+          * The array of geospatial distances, as a string (e.g., `"[25, 50, 100]"`), which will be parsed and converted into options for the distance dropdown.
+         */
+        "geospatialDistances": string[] | string;
+        /**
+          * A valid Google API key to be used for geocoding a city or postal code.
+         */
+        "googleApiKey": string;
+        /**
+          * Specifies the name of the field that contains the latitude value.
+         */
+        "latitudeField": string;
+        /**
+          * Specifies the name of the field that contains the longitude value.
+         */
+        "longitudeField": string;
+        /**
+          * Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.
+         */
+        "useNavigator": boolean;
+    }
+    interface AtomicIconFacet {
+        /**
+          * Specifies an explicit list of `allowedValues` in the Search API request, as a JSON string representation.  If you specify a list of values for this option, the facet uses only these values (if they are available in the current result set).  Example:  The following facet only uses the `Contact`, `Account`, and `File` values of the `objecttype` field. Even if the current result set contains other `objecttype` values, such as `Message`, or `Product`, the facet does not use those other values.  ```html <atomic-facet field="objecttype" allowed-values='["Contact","Account","File"]'></atomic-facet> ```  The maximum amount of allowed values is 25.  Default value is `undefined`, and the facet uses all available values for its `field` in the current result set.
+         */
+        "allowedValues": string[] | string;
+        /**
+          * The required facets and values for this facet to be displayed. Examples: ```html <atomic-facet facet-id="abc" field="objecttype" ...></atomic-facet>  <!-- To show the facet when any value is selected in the facet with id "abc": --> <atomic-facet   depends-on-abc   ... ></atomic-facet>  <!-- To show the facet when value "doc" is selected in the facet with id "abc": --> <atomic-facet   depends-on-abc="doc"   ... ></atomic-facet> ```
+         */
+        "dependsOn": Record<string, string>;
+        /**
+          * Whether to display the facet values as checkboxes (multiple selection), links (single selection) or boxes (multiple selection). Possible values are 'checkbox', 'link', and 'box'.
+         */
+        "displayValuesAs": 'checkbox' | 'link' | 'box';
+        /**
+          * Whether to allow excluding values from the facet.
+         */
+        "enableExclusion": boolean;
+        /**
+          * Specifies a unique identifier for the facet.
+         */
+        "facetId"?: string;
+        /**
+          * The field whose values you want to display in the facet.
+         */
+        "field": string;
+        /**
+          * Whether to exclude the parents of folded results when estimating the result count for each facet value.   Note: Resulting count is only an estimation, in some cases this value could be incorrect.
+         */
+        "filterFacetCount": boolean;
+        /**
+          * The [heading level](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements) to use for the heading over the facet, from 1 to 6.
+         */
+        "headingLevel": number;
+        /**
+          * The maximum number of results to scan in the index to ensure that the facet lists all potential facet values. Note: A high injectionDepth may negatively impact the facet request performance. Minimum: `0` Default: `1000`
+         */
+        "injectionDepth": number;
+        /**
+          * Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.
+         */
+        "isCollapsed": boolean;
+        /**
+          * The non-localized label for the facet. Used in the `atomic-breadbox` component through the bindings store.
+         */
+        "label": string;
+        /**
+          * The number of values to request for this facet. Also determines the number of additional values to request each time more values are shown.
+         */
+        "numberOfValues": number;
+        /**
+          * The sort criterion to apply to the returned facet values. Possible values are 'score', 'alphanumeric',  'occurrences',  'score' and 'automatic'.
+         */
+        "sortCriteria": FacetSortCriterion;
+    }
+    interface CoveoMap {
+        /**
+          * Controls whether the map automatically pans to the info window.
+         */
+        "disableInfoWindowAutoPan": boolean;
+        /**
+          * A list of non-default fields to include in the query results. Specify the property as an array using a JSON string representation:   <coveo-map fields-to-include='["fieldA", "fieldB"]'></coveo-map>
+         */
+        "fieldsToInclude": string[] | string;
+        /**
+          * Defines how the map handles gestures like zooming and panning.  Type: "none" | "greedy" | "cooperative" | "auto"
+         */
+        "gestureHandling": "none" | "greedy" | "cooperative" | "auto";
+        /**
+          * A valid Google API key to be used for rendering the Google Map.
+         */
+        "googleApiKey": string;
+        /**
+          * The SVG icon used for the custom pin icon's hover state, replacing the `pinIcon` content on `mouseenter`.  - Use a value that starts with `http://`, `https://`, `/`, `./`, or `../` to fetch and display the icon from an external location. - Use a stringified SVG to render it directly.  Note: This icon will only be rendered if `pinIcon` is also set.
+         */
+        "hoverPinIcon": string;
+        /**
+          * Sets the maximum width of the InfoWindow.
+         */
+        "infoWindowMaxWidth": number;
+        /**
+          * An inline HTML template string for customizing the content of the info window.  - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available as placeholders in the template. - You can include conditional blocks using `{{#if field}}...{{/if}}` to render content only if the field is present. - Array fields can be iterated over using `{{#each arrayField}}...{{/each}}`, with `{{this}}` representing each item in the array. - This property takes precedence over `infoWindowTemplateUrl` if both are set.  Example: ```html <div id="pin-details"> <div class="title"><h1>{{title}}</h1></div> <div class="extra"> {{#if fieldA}} <p>{{fieldA}}</p> {{/if}} {{#if fieldB}} <p>{{fieldB}}</p> {{/if}} </div> </div> ```
+         */
+        "infoWindowTemplate": string;
+        /**
+          * A URL pointing to a template file (.html) for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `/`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template. - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: ```<div id="pin-details"><div class="title">{{title}}</div></div>```
+         */
+        "infoWindowTemplateUrl": string;
+        /**
+          * Allows the user to set the initial zoom level of the map.
+         */
+        "initialZoom": number;
+        /**
+          * Specifies the name of the field that contains the latitude value.
+         */
+        "latitudeField": string;
+        /**
+          * Specifies the name of the field that contains the longitude value.
+         */
+        "longitudeField": string;
+        /**
+          * Allows the user to set the initial center of the map.  Expect a JSON string for { lat: number, lng: number }  Default: { lat: 0, lng: 0 }
+         */
+        "mapCenter": string;
+        /**
+          * Allows the user to specify a Google Maps Map ID for custom map styling.
+         */
+        "mapId": string;
+        /**
+          * Sets teh maximum zoom level. Default: 15
+         */
+        "maxZoom": number;
+        /**
+          * Sets the minimum zoom level. Default: 2
+         */
+        "minZoom": number;
+        /**
+          * The SVG icon to use for a custom pin icon.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch and display an icon from a given location. - Use a stringified SVG to display it directly.
+         */
+        "pinIcon": string;
+        /**
+          * Enables or disables zooming via the scroll wheel.
+         */
+        "scrollwheel": boolean;
+        /**
+          * Controls whether the Street View control is visible.
+         */
+        "streetViewControl": boolean;
+        /**
+          * Allows users to enable or disable the zoom control.
+         */
+        "zoomControl": boolean;
+    }
+    interface CoveoToggleButton {
+        /**
+          * A custom class to be applied to the button element. This allows users to add their own CSS styles to customize the button's appearance. Example: "my-custom-toggle-button"
+         */
+        "buttonClass": string;
+        /**
+          * A CSS selector string for the container element that holds the target to be toggled. - If prefixed with `#`, it will be treated as an ID selector. - If prefixed with `.`, it will be treated as a class selector. - If no prefix is provided, it will first try to match an element by ID, and if none is found, it will attempt to match a class name.  Default: ".search-container"  Example: ".result-container", "#myContainer", "container"
+         */
+        "containerSelector": string;
+        /**
+          * Sets the icon to be displayed inside the button. - The icon can be any string, emoji, or character entity. - If provided as a URL (starting with `http://`, `https://`, `./`, `../`, or `/`), the button will fetch and display the SVG from that location. - If the icon is a stringified SVG (starts with `<svg`), it will be directly rendered within the button. Example: "▼", "►", `<svg ...>`, or a URL like "https://example.com/icon.svg"
+         */
+        "icon": string;
+        /**
+          * Defines the initial open state of the button and the target element. If true, the button and target element will be rendered with the "open" class. Example: true or false
+         */
+        "isOpen": boolean;
+        /**
+          * Sets the accessible label for the button. This label is used for screen readers to describe the button's purpose. Example: "Toggle Details"
+         */
+        "label": string;
+        /**
+          * A CSS selector string for the target element within the container that will be toggled. - If prefixed with `#`, it will be treated as an ID selector. - If prefixed with `.`, it will be treated as a class selector. - If no prefix is provided, it will first try to match an element by ID within the container, and if none is found, it will attempt to match a class name.  When the button is clicked, the "open" class will be toggled on this target element.  Example: ".detail-wrapper", "#details", "detailWrapper"
+         */
+        "targetSelector": string;
     }
     interface CustomPerPage {
         "choicesDisplayed": string;
@@ -21,6 +214,14 @@ export namespace Components {
         "tabId": string;
     }
     interface ExportSearchResults {
+    }
+    /**
+     * Sample custom Atomic result component, to be used inside an Atomic Result Template.
+     * This component showcases a component that conditionally renders the author of a result, with a fallback to display "anonymous" in the event that no author is available for a document, for educational purposes.
+     * In a real life scenario, we recommend using [result-field-condition](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-field-condition/) and [atomic-result-text](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-result-text/).
+     */
+    interface FacilityIcon {
+        "field": string;
     }
     interface SaveQuery {
     }
@@ -52,6 +253,30 @@ declare global {
         prototype: HTMLAddToCartElement;
         new (): HTMLAddToCartElement;
     };
+    interface HTMLAtomicDistanceResourcesElement extends Components.AtomicDistanceResources, HTMLStencilElement {
+    }
+    var HTMLAtomicDistanceResourcesElement: {
+        prototype: HTMLAtomicDistanceResourcesElement;
+        new (): HTMLAtomicDistanceResourcesElement;
+    };
+    interface HTMLAtomicIconFacetElement extends Components.AtomicIconFacet, HTMLStencilElement {
+    }
+    var HTMLAtomicIconFacetElement: {
+        prototype: HTMLAtomicIconFacetElement;
+        new (): HTMLAtomicIconFacetElement;
+    };
+    interface HTMLCoveoMapElement extends Components.CoveoMap, HTMLStencilElement {
+    }
+    var HTMLCoveoMapElement: {
+        prototype: HTMLCoveoMapElement;
+        new (): HTMLCoveoMapElement;
+    };
+    interface HTMLCoveoToggleButtonElement extends Components.CoveoToggleButton, HTMLStencilElement {
+    }
+    var HTMLCoveoToggleButtonElement: {
+        prototype: HTMLCoveoToggleButtonElement;
+        new (): HTMLCoveoToggleButtonElement;
+    };
     interface HTMLCustomPerPageElement extends Components.CustomPerPage, HTMLStencilElement {
     }
     var HTMLCustomPerPageElement: {
@@ -69,6 +294,17 @@ declare global {
     var HTMLExportSearchResultsElement: {
         prototype: HTMLExportSearchResultsElement;
         new (): HTMLExportSearchResultsElement;
+    };
+    /**
+     * Sample custom Atomic result component, to be used inside an Atomic Result Template.
+     * This component showcases a component that conditionally renders the author of a result, with a fallback to display "anonymous" in the event that no author is available for a document, for educational purposes.
+     * In a real life scenario, we recommend using [result-field-condition](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-field-condition/) and [atomic-result-text](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-result-text/).
+     */
+    interface HTMLFacilityIconElement extends Components.FacilityIcon, HTMLStencilElement {
+    }
+    var HTMLFacilityIconElement: {
+        prototype: HTMLFacilityIconElement;
+        new (): HTMLFacilityIconElement;
     };
     interface HTMLSaveQueryElement extends Components.SaveQuery, HTMLStencilElement {
     }
@@ -102,9 +338,14 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "add-to-cart": HTMLAddToCartElement;
+        "atomic-distance-resources": HTMLAtomicDistanceResourcesElement;
+        "atomic-icon-facet": HTMLAtomicIconFacetElement;
+        "coveo-map": HTMLCoveoMapElement;
+        "coveo-toggle-button": HTMLCoveoToggleButtonElement;
         "custom-per-page": HTMLCustomPerPageElement;
         "custom-tab": HTMLCustomTabElement;
         "export-search-results": HTMLExportSearchResultsElement;
+        "facility-icon": HTMLFacilityIconElement;
         "save-query": HTMLSaveQueryElement;
         "search-box-category-suggestions": HTMLSearchBoxCategorySuggestionsElement;
         "search-box-field-suggestions": HTMLSearchBoxFieldSuggestionsElement;
@@ -114,6 +355,198 @@ declare global {
 declare namespace LocalJSX {
     interface AddToCart {
         "callbackFunction"?: string;
+    }
+    interface AtomicDistanceResources {
+        /**
+          * The default latitude value to be used if no other location is provided.
+         */
+        "defaultLatitude"?: number;
+        /**
+          * The default longitude value to be used if no other location is provided.
+         */
+        "defaultLongitude"?: number;
+        /**
+          * Specifies the name of the field in which to store the distance value.
+         */
+        "distanceField": string;
+        /**
+          * The array of geospatial distances, as a string (e.g., `"[25, 50, 100]"`), which will be parsed and converted into options for the distance dropdown.
+         */
+        "geospatialDistances": string[] | string;
+        /**
+          * A valid Google API key to be used for geocoding a city or postal code.
+         */
+        "googleApiKey": string;
+        /**
+          * Specifies the name of the field that contains the latitude value.
+         */
+        "latitudeField": string;
+        /**
+          * Specifies the name of the field that contains the longitude value.
+         */
+        "longitudeField": string;
+        /**
+          * Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.
+         */
+        "useNavigator"?: boolean;
+    }
+    interface AtomicIconFacet {
+        /**
+          * Specifies an explicit list of `allowedValues` in the Search API request, as a JSON string representation.  If you specify a list of values for this option, the facet uses only these values (if they are available in the current result set).  Example:  The following facet only uses the `Contact`, `Account`, and `File` values of the `objecttype` field. Even if the current result set contains other `objecttype` values, such as `Message`, or `Product`, the facet does not use those other values.  ```html <atomic-facet field="objecttype" allowed-values='["Contact","Account","File"]'></atomic-facet> ```  The maximum amount of allowed values is 25.  Default value is `undefined`, and the facet uses all available values for its `field` in the current result set.
+         */
+        "allowedValues"?: string[] | string;
+        /**
+          * The required facets and values for this facet to be displayed. Examples: ```html <atomic-facet facet-id="abc" field="objecttype" ...></atomic-facet>  <!-- To show the facet when any value is selected in the facet with id "abc": --> <atomic-facet   depends-on-abc   ... ></atomic-facet>  <!-- To show the facet when value "doc" is selected in the facet with id "abc": --> <atomic-facet   depends-on-abc="doc"   ... ></atomic-facet> ```
+         */
+        "dependsOn"?: Record<string, string>;
+        /**
+          * Whether to display the facet values as checkboxes (multiple selection), links (single selection) or boxes (multiple selection). Possible values are 'checkbox', 'link', and 'box'.
+         */
+        "displayValuesAs"?: 'checkbox' | 'link' | 'box';
+        /**
+          * Whether to allow excluding values from the facet.
+         */
+        "enableExclusion"?: boolean;
+        /**
+          * Specifies a unique identifier for the facet.
+         */
+        "facetId"?: string;
+        /**
+          * The field whose values you want to display in the facet.
+         */
+        "field": string;
+        /**
+          * Whether to exclude the parents of folded results when estimating the result count for each facet value.   Note: Resulting count is only an estimation, in some cases this value could be incorrect.
+         */
+        "filterFacetCount"?: boolean;
+        /**
+          * The [heading level](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements) to use for the heading over the facet, from 1 to 6.
+         */
+        "headingLevel"?: number;
+        /**
+          * The maximum number of results to scan in the index to ensure that the facet lists all potential facet values. Note: A high injectionDepth may negatively impact the facet request performance. Minimum: `0` Default: `1000`
+         */
+        "injectionDepth"?: number;
+        /**
+          * Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.
+         */
+        "isCollapsed"?: boolean;
+        /**
+          * The non-localized label for the facet. Used in the `atomic-breadbox` component through the bindings store.
+         */
+        "label"?: string;
+        /**
+          * The number of values to request for this facet. Also determines the number of additional values to request each time more values are shown.
+         */
+        "numberOfValues"?: number;
+        /**
+          * The sort criterion to apply to the returned facet values. Possible values are 'score', 'alphanumeric',  'occurrences',  'score' and 'automatic'.
+         */
+        "sortCriteria"?: FacetSortCriterion;
+    }
+    interface CoveoMap {
+        /**
+          * Controls whether the map automatically pans to the info window.
+         */
+        "disableInfoWindowAutoPan"?: boolean;
+        /**
+          * A list of non-default fields to include in the query results. Specify the property as an array using a JSON string representation:   <coveo-map fields-to-include='["fieldA", "fieldB"]'></coveo-map>
+         */
+        "fieldsToInclude"?: string[] | string;
+        /**
+          * Defines how the map handles gestures like zooming and panning.  Type: "none" | "greedy" | "cooperative" | "auto"
+         */
+        "gestureHandling"?: "none" | "greedy" | "cooperative" | "auto";
+        /**
+          * A valid Google API key to be used for rendering the Google Map.
+         */
+        "googleApiKey": string;
+        /**
+          * The SVG icon used for the custom pin icon's hover state, replacing the `pinIcon` content on `mouseenter`.  - Use a value that starts with `http://`, `https://`, `/`, `./`, or `../` to fetch and display the icon from an external location. - Use a stringified SVG to render it directly.  Note: This icon will only be rendered if `pinIcon` is also set.
+         */
+        "hoverPinIcon"?: string;
+        /**
+          * Sets the maximum width of the InfoWindow.
+         */
+        "infoWindowMaxWidth"?: number;
+        /**
+          * An inline HTML template string for customizing the content of the info window.  - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available as placeholders in the template. - You can include conditional blocks using `{{#if field}}...{{/if}}` to render content only if the field is present. - Array fields can be iterated over using `{{#each arrayField}}...{{/each}}`, with `{{this}}` representing each item in the array. - This property takes precedence over `infoWindowTemplateUrl` if both are set.  Example: ```html <div id="pin-details"> <div class="title"><h1>{{title}}</h1></div> <div class="extra"> {{#if fieldA}} <p>{{fieldA}}</p> {{/if}} {{#if fieldB}} <p>{{fieldB}}</p> {{/if}} </div> </div> ```
+         */
+        "infoWindowTemplate"?: string;
+        /**
+          * A URL pointing to a template file (.html) for customizing the content of the info window.  - Use a value that starts with `http://`, `https://`, `/`, `./`, or `../` to fetch the template from a given location. - The template can contain placeholders in the format `{{field}}`, which will be replaced with corresponding data values from the `result.raw` array. - Only fields specified in the `fieldsToInclude` property will be available for use as placeholders in the template. - Conditional blocks can be included using `{{#if field}}...{{/if}}` to render content only if the field is present.  Example: ```<div id="pin-details"><div class="title">{{title}}</div></div>```
+         */
+        "infoWindowTemplateUrl"?: string;
+        /**
+          * Allows the user to set the initial zoom level of the map.
+         */
+        "initialZoom"?: number;
+        /**
+          * Specifies the name of the field that contains the latitude value.
+         */
+        "latitudeField": string;
+        /**
+          * Specifies the name of the field that contains the longitude value.
+         */
+        "longitudeField": string;
+        /**
+          * Allows the user to set the initial center of the map.  Expect a JSON string for { lat: number, lng: number }  Default: { lat: 0, lng: 0 }
+         */
+        "mapCenter"?: string;
+        /**
+          * Allows the user to specify a Google Maps Map ID for custom map styling.
+         */
+        "mapId"?: string;
+        /**
+          * Sets teh maximum zoom level. Default: 15
+         */
+        "maxZoom"?: number;
+        /**
+          * Sets the minimum zoom level. Default: 2
+         */
+        "minZoom"?: number;
+        /**
+          * The SVG icon to use for a custom pin icon.  - Use a value that starts with `http://`, `https://`, `./`, or `../` to fetch and display an icon from a given location. - Use a stringified SVG to display it directly.
+         */
+        "pinIcon"?: string;
+        /**
+          * Enables or disables zooming via the scroll wheel.
+         */
+        "scrollwheel"?: boolean;
+        /**
+          * Controls whether the Street View control is visible.
+         */
+        "streetViewControl"?: boolean;
+        /**
+          * Allows users to enable or disable the zoom control.
+         */
+        "zoomControl"?: boolean;
+    }
+    interface CoveoToggleButton {
+        /**
+          * A custom class to be applied to the button element. This allows users to add their own CSS styles to customize the button's appearance. Example: "my-custom-toggle-button"
+         */
+        "buttonClass"?: string;
+        /**
+          * A CSS selector string for the container element that holds the target to be toggled. - If prefixed with `#`, it will be treated as an ID selector. - If prefixed with `.`, it will be treated as a class selector. - If no prefix is provided, it will first try to match an element by ID, and if none is found, it will attempt to match a class name.  Default: ".search-container"  Example: ".result-container", "#myContainer", "container"
+         */
+        "containerSelector": string;
+        /**
+          * Sets the icon to be displayed inside the button. - The icon can be any string, emoji, or character entity. - If provided as a URL (starting with `http://`, `https://`, `./`, `../`, or `/`), the button will fetch and display the SVG from that location. - If the icon is a stringified SVG (starts with `<svg`), it will be directly rendered within the button. Example: "▼", "►", `<svg ...>`, or a URL like "https://example.com/icon.svg"
+         */
+        "icon": string;
+        /**
+          * Defines the initial open state of the button and the target element. If true, the button and target element will be rendered with the "open" class. Example: true or false
+         */
+        "isOpen"?: boolean;
+        /**
+          * Sets the accessible label for the button. This label is used for screen readers to describe the button's purpose. Example: "Toggle Details"
+         */
+        "label"?: string;
+        /**
+          * A CSS selector string for the target element within the container that will be toggled. - If prefixed with `#`, it will be treated as an ID selector. - If prefixed with `.`, it will be treated as a class selector. - If no prefix is provided, it will first try to match an element by ID within the container, and if none is found, it will attempt to match a class name.  When the button is clicked, the "open" class will be toggled on this target element.  Example: ".detail-wrapper", "#details", "detailWrapper"
+         */
+        "targetSelector": string;
     }
     interface CustomPerPage {
         "choicesDisplayed": string;
@@ -127,6 +560,14 @@ declare namespace LocalJSX {
         "tabId": string;
     }
     interface ExportSearchResults {
+    }
+    /**
+     * Sample custom Atomic result component, to be used inside an Atomic Result Template.
+     * This component showcases a component that conditionally renders the author of a result, with a fallback to display "anonymous" in the event that no author is available for a document, for educational purposes.
+     * In a real life scenario, we recommend using [result-field-condition](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-field-condition/) and [atomic-result-text](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-result-text/).
+     */
+    interface FacilityIcon {
+        "field"?: string;
     }
     interface SaveQuery {
     }
@@ -152,9 +593,14 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "add-to-cart": AddToCart;
+        "atomic-distance-resources": AtomicDistanceResources;
+        "atomic-icon-facet": AtomicIconFacet;
+        "coveo-map": CoveoMap;
+        "coveo-toggle-button": CoveoToggleButton;
         "custom-per-page": CustomPerPage;
         "custom-tab": CustomTab;
         "export-search-results": ExportSearchResults;
+        "facility-icon": FacilityIcon;
         "save-query": SaveQuery;
         "search-box-category-suggestions": SearchBoxCategorySuggestions;
         "search-box-field-suggestions": SearchBoxFieldSuggestions;
@@ -166,9 +612,19 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "add-to-cart": LocalJSX.AddToCart & JSXBase.HTMLAttributes<HTMLAddToCartElement>;
+            "atomic-distance-resources": LocalJSX.AtomicDistanceResources & JSXBase.HTMLAttributes<HTMLAtomicDistanceResourcesElement>;
+            "atomic-icon-facet": LocalJSX.AtomicIconFacet & JSXBase.HTMLAttributes<HTMLAtomicIconFacetElement>;
+            "coveo-map": LocalJSX.CoveoMap & JSXBase.HTMLAttributes<HTMLCoveoMapElement>;
+            "coveo-toggle-button": LocalJSX.CoveoToggleButton & JSXBase.HTMLAttributes<HTMLCoveoToggleButtonElement>;
             "custom-per-page": LocalJSX.CustomPerPage & JSXBase.HTMLAttributes<HTMLCustomPerPageElement>;
             "custom-tab": LocalJSX.CustomTab & JSXBase.HTMLAttributes<HTMLCustomTabElement>;
             "export-search-results": LocalJSX.ExportSearchResults & JSXBase.HTMLAttributes<HTMLExportSearchResultsElement>;
+            /**
+             * Sample custom Atomic result component, to be used inside an Atomic Result Template.
+             * This component showcases a component that conditionally renders the author of a result, with a fallback to display "anonymous" in the event that no author is available for a document, for educational purposes.
+             * In a real life scenario, we recommend using [result-field-condition](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-field-condition/) and [atomic-result-text](https://docs.coveo.com/en/atomic/latest/reference/result-template-components/atomic-result-text/).
+             */
+            "facility-icon": LocalJSX.FacilityIcon & JSXBase.HTMLAttributes<HTMLFacilityIconElement>;
             "save-query": LocalJSX.SaveQuery & JSXBase.HTMLAttributes<HTMLSaveQueryElement>;
             /**
              * The `search-box-category-suggestions` component can be added as a child of an `atomic-search-box` component, allowing for the configuration of category suggestions.

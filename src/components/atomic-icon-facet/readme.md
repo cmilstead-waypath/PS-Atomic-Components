@@ -21,6 +21,49 @@ A custom Coveo Atomic facet component that mirrors the behavior and styling of t
 - **Lightweight**: no facet search UI, for scenarios where you only need iconified filtering  
 
 ---
+## Installation
+```bash 
+
+npm install atomic-icon-facet
+```
+
+---
+
+## Usage
+```html
+<atomic-search-interface>
+  
+  <!-- checkbox mode (default) -->
+  <atomic-icon-facet
+    field="facilityType"
+    label="Facility Type"
+    number-of-values="8"
+    sort-criteria="automatic"
+    injection-depth="1000"
+    filter-facet-count="true"
+    heading-level="2">
+  </atomic-icon-facet>
+
+  <!-- link mode -->
+  <atomic-icon-facet
+    field="category"
+    label="Category"
+    display-values-as="link"
+    number-of-values="5"
+    heading-level="3">
+  </atomic-icon-facet>
+
+  <!-- box mode -->
+  <atomic-icon-facet
+    field="status"
+    label="Status"
+    display-values-as="box"
+    number-of-values="6">
+  </atomic-icon-facet>
+
+</atomic-search-interface>
+
+```
 
 
 <!-- Auto Generated Below -->
@@ -45,7 +88,29 @@ A custom Coveo Atomic facet component that mirrors the behavior and styling of t
 | `sortCriteria`       | `sort-criteria`      | The sort criterion to apply to the returned facet values. Possible values are 'score', 'alphanumeric',  'occurrences',  'score' and 'automatic'.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | `"alphanumeric" \| "automatic" \| "occurrences" \| "score"` | `'automatic'` |
 
 
+## CSS Custom Properties
+
+You can control your icon size via CSS variables:
+
+```css
+atomic-icon-facet {
+  --atomic-facet-icon-width: 24px;
+  --atomic-facet-icon-height: 24px;
+}
+```
+
+You can also control the gap between the icon and the label text, depending on the display mode you choose:
+
+```css
+atomic-icon-facet {
+ --atomic-facet-icon-label-gap: 0.5rem; /* Gap between icon and label text. display-values-as="checkbox" */
+  --atomic-facet-icon-text-gap: 0px; /* Gap between icon and label text. display-values-as="box | link"*/
+}
+```
+
 ## Shadow Parts
+
+This component exposes the same ::part() slots as the v2 atomic-facet, plus your icon span:
 
 | Part                        | Description                                                                     |
 | --------------------------- | --------------------------------------------------------------------------------|

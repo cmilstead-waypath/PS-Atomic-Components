@@ -1,0 +1,329 @@
+{
+  "timestamp": "2025-06-20T15:19:52",
+  "compiler": {
+    "name": "@stencil/core",
+    "version": "2.22.2",
+    "typescriptVersion": "4.9.4"
+  },
+  "components": [
+    {
+      "filePath": "./src/atomic-icon-facet.tsx",
+      "encapsulation": "shadow",
+      "tag": "atomic-icon-facet",
+      "docs": "",
+      "docsTags": [],
+      "usage": {},
+      "props": [
+        {
+          "name": "allowedValues",
+          "type": "string | string[]",
+          "mutable": true,
+          "attr": "allowed-values",
+          "reflectToAttr": false,
+          "docs": "Specifies an explicit list of `allowedValues` in the Search API request, as a JSON string representation.\n\nIf you specify a list of values for this option, the facet uses only these values (if they are available in\nthe current result set).\n\nExample:\n\nThe following facet only uses the `Contact`, `Account`, and `File` values of the `objecttype` field. Even if the\ncurrent result set contains other `objecttype` values, such as `Message`, or `Product`, the facet does not use\nthose other values.\n\n```html\n<atomic-facet field=\"objecttype\" allowed-values='[\"Contact\",\"Account\",\"File\"]'></atomic-facet>\n```\n\nThe maximum amount of allowed values is 25.\n\nDefault value is `undefined`, and the facet uses all available values for its `field` in the current result set.",
+          "docsTags": [],
+          "default": "'[]'",
+          "values": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "string[]"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "dependsOn",
+          "type": "{ [x: string]: string; }",
+          "mutable": false,
+          "reflectToAttr": false,
+          "docs": "The required facets and values for this facet to be displayed.\nExamples:\n```html\n<atomic-facet facet-id=\"abc\" field=\"objecttype\" ...></atomic-facet>\n\n<!-- To show the facet when any value is selected in the facet with id \"abc\": -->\n<atomic-facet\n  depends-on-abc\n  ...\n></atomic-facet>\n\n<!-- To show the facet when value \"doc\" is selected in the facet with id \"abc\": -->\n<atomic-facet\n  depends-on-abc=\"doc\"\n  ...\n></atomic-facet>\n```",
+          "docsTags": [],
+          "default": "{}",
+          "values": [
+            {
+              "type": "{ [x: string]: string; }"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "displayValuesAs",
+          "type": "\"box\" | \"checkbox\" | \"link\"",
+          "mutable": false,
+          "attr": "display-values-as",
+          "reflectToAttr": true,
+          "docs": "Whether to display the facet values as checkboxes (multiple selection), links (single selection) or boxes (multiple selection).\nPossible values are 'checkbox', 'link', and 'box'.",
+          "docsTags": [],
+          "default": "'checkbox'",
+          "values": [
+            {
+              "value": "box",
+              "type": "string"
+            },
+            {
+              "value": "checkbox",
+              "type": "string"
+            },
+            {
+              "value": "link",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "enableExclusion",
+          "type": "boolean",
+          "mutable": false,
+          "attr": "enable-exclusion",
+          "reflectToAttr": true,
+          "docs": "Whether to allow excluding values from the facet.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "facetId",
+          "type": "string",
+          "mutable": true,
+          "attr": "facet-id",
+          "reflectToAttr": true,
+          "docs": "Specifies a unique identifier for the facet.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": true,
+          "required": false
+        },
+        {
+          "name": "field",
+          "type": "string",
+          "mutable": false,
+          "attr": "field",
+          "reflectToAttr": true,
+          "docs": "The field whose values you want to display in the facet.",
+          "docsTags": [],
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": true
+        },
+        {
+          "name": "filterFacetCount",
+          "type": "boolean",
+          "mutable": false,
+          "attr": "filter-facet-count",
+          "reflectToAttr": true,
+          "docs": "Whether to exclude the parents of folded results when estimating the result count for each facet value.\n\n\nNote: Resulting count is only an estimation, in some cases this value could be incorrect.",
+          "docsTags": [],
+          "default": "true",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "headingLevel",
+          "type": "number",
+          "mutable": false,
+          "attr": "heading-level",
+          "reflectToAttr": true,
+          "docs": "The [heading level](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/Heading_Elements) to use for the heading over the facet, from 1 to 6.",
+          "docsTags": [],
+          "default": "0",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "injectionDepth",
+          "type": "number",
+          "mutable": false,
+          "attr": "injection-depth",
+          "reflectToAttr": false,
+          "docs": "The maximum number of results to scan in the index to ensure that the facet lists all potential facet values.\nNote: A high injectionDepth may negatively impact the facet request performance.\nMinimum: `0`\nDefault: `1000`",
+          "docsTags": [],
+          "default": "1000",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "isCollapsed",
+          "type": "boolean",
+          "mutable": true,
+          "attr": "is-collapsed",
+          "reflectToAttr": true,
+          "docs": "Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "mutable": false,
+          "attr": "label",
+          "reflectToAttr": true,
+          "docs": "The non-localized label for the facet.\nUsed in the `atomic-breadbox` component through the bindings store.",
+          "docsTags": [],
+          "default": "'no-label'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "numberOfValues",
+          "type": "number",
+          "mutable": false,
+          "attr": "number-of-values",
+          "reflectToAttr": true,
+          "docs": "The number of values to request for this facet.\nAlso determines the number of additional values to request each time more values are shown.",
+          "docsTags": [],
+          "default": "8",
+          "values": [
+            {
+              "type": "number"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
+          "name": "sortCriteria",
+          "type": "\"alphanumeric\" | \"automatic\" | \"occurrences\" | \"score\"",
+          "mutable": false,
+          "attr": "sort-criteria",
+          "reflectToAttr": true,
+          "docs": "The sort criterion to apply to the returned facet values.\nPossible values are 'score', 'alphanumeric',  'occurrences',  'score' and 'automatic'.",
+          "docsTags": [],
+          "default": "'automatic'",
+          "values": [
+            {
+              "value": "alphanumeric",
+              "type": "string"
+            },
+            {
+              "value": "automatic",
+              "type": "string"
+            },
+            {
+              "value": "occurrences",
+              "type": "string"
+            },
+            {
+              "value": "score",
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        }
+      ],
+      "methods": [],
+      "events": [],
+      "listeners": [],
+      "styles": [],
+      "slots": [],
+      "parts": [
+        {
+          "name": "clear-button",
+          "docs": ""
+        },
+        {
+          "name": "clear-button-icon",
+          "docs": ""
+        },
+        {
+          "name": "facet",
+          "docs": ""
+        },
+        {
+          "name": "label-button",
+          "docs": ""
+        },
+        {
+          "name": "label-button-icon",
+          "docs": ""
+        },
+        {
+          "name": "show-less",
+          "docs": ""
+        },
+        {
+          "name": "show-more",
+          "docs": ""
+        },
+        {
+          "name": "show-more-less-icon",
+          "docs": ""
+        },
+        {
+          "name": "value-box",
+          "docs": ""
+        },
+        {
+          "name": "value-checkbox-label",
+          "docs": ""
+        },
+        {
+          "name": "value-count",
+          "docs": ""
+        },
+        {
+          "name": "value-label",
+          "docs": ""
+        },
+        {
+          "name": "value-link",
+          "docs": ""
+        },
+        {
+          "name": "values",
+          "docs": ""
+        }
+      ],
+      "dependents": [],
+      "dependencies": [],
+      "dependencyGraph": {}
+    }
+  ]
+}

@@ -65,30 +65,32 @@ Place the component in your `atomic-facet-manager` to include it alongside other
 | `isCollapsed`                      | `is-collapsed`         | Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property. | `boolean`            | `false`       |
 | `latitudeField` _(required)_       | `latitude-field`       | Specifies the name of the field that contains the latitude value.                                                                                       | `string`             | `undefined`   |
 | `longitudeField` _(required)_      | `longitude-field`      | Specifies the name of the field that contains the longitude value.                                                                                      | `string`             | `undefined`   |
+| `mobileBreakpoint`                 | `mobile-breakpoint`    | Mobile breakpoint at which the Apply button becomes visible                                                                                             | `string`             | `'640px'`     |
 | `panelTitle`                       | `panel-title`          | The text that appears in the header.                                                                                                                    | `string`             | `'Distance'`  |
 | `useNavigator`                     | `use-navigator`        | Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.                 | `boolean`            | `true`        |
 
 ## Shadow Parts
 
-| Part                            | Description                                                             |
-| ------------------------------- | ------------------------------------------------------------------------|
-| `"content"`                     | The container for the panel content.                                    |
-| `"distance-selector"`           | The distance selector dropdown.                                         |
-| `"distance-selector-container"` | The container for the distance selector dropdown.                       |
-| `"distance-selector-wrapper"`   | The wrapper around the distance selector dropdown.                      |
-| `"error-message"`               | The container for displaying error messages related to location input.  |
-| `"form-container"`              | The container for the distance selector and location input.             |
-| `"from-box"`                    | The "from" text between the distance selector and location input.       |
-| `"km-input"`                    | The radio input for selecting kilometers.                               |
-| `"km-label"`                    | The label for the kilometers radio input.                               |
-| `"label-button"`                | The button that toggles the collapse/expand of the panel.               |
-| `"label-button-icon"`           | The icon inside the label button.                                       |
-| `"metric-container"`            | The container for the distance unit radio buttons.                      |
-| `"mile-input"`                  | The radio input for selecting miles.                                    |
-| `"mile-label"`                  | The label for the miles radio input.                                    |
-| `"panel"`                       | The root element of the component.                                      |
-| `"postal-field-container"`      | The container for the location input field.                             |
-| `"postal-filter-input"`         | The input field for entering postal code or city.                       |
+| Part                            | Description |
+| ------------------------------- | ----------- |
+| `"content"`                     |             |
+| `"distance-selector"`           |             |
+| `"distance-selector-container"` |             |
+| `"distance-selector-wrapper"`   |             |
+| `"error-message"`               |             |
+| `"form-container"`              |             |
+| `"from-box"`                    |             |
+| `"km-input"`                    |             |
+| `"km-label"`                    |             |
+| `"label-button"`                |             |
+| `"label-button-icon"`           |             |
+| `"metric-container"`            |             |
+| `"mile-input"`                  |             |
+| `"mile-label"`                  |             |
+| `"panel"`                       |             |
+| `"postal-field-container"`      |             |
+| `"postal-filter-input"`         |             |
+| `"postal-submit-button"`        |             |
 
 
 ----------------------------------------------

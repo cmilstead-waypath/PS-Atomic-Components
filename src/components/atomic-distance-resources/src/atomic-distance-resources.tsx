@@ -1,14 +1,19 @@
 import { Bindings, initializeBindings } from '@coveo/atomic';
-import { Component, Prop, Element, h, State, Fragment } from '@stencil/core';
+import { Component, Prop, Element, h, State, Fragment, forceUpdate } from '@stencil/core';
 import {
   SearchStatusState,
   buildSearchStatus,
+  buildFacet,
+  Facet,
+  FacetState,
+  FacetOptions,
   SearchEngine,
   Unsubscribe,
   loadAdvancedSearchQueryActions,
   loadSearchActions,
   loadSearchAnalyticsActions
 } from '@coveo/headless';
+import { FacetInfo } from '@coveo/atomic/dist/types/components/common/facets/facet-common-store';
 import {
   NavigatorPositionProvider, StaticPositionProvider, IGeolocationPositionProvider, IGeolocationPosition, LatLngCookiePositionProvider
 } from '../src/providers';
@@ -16,9 +21,29 @@ import {
 @Component({
   tag: 'atomic-distance-resources',
   styleUrl: 'atomic-distance-resources.css',
-  shadow: false,
+  shadow: true,
 })
 export class AtomicDistanceResources {
+  /**
+  * @part panel - The root element of the component.
+  * @part label-button - The button that toggles the collapse/expand of the panel.
+  * @part label-button-icon - The icon inside the label button.
+  * @part content - The container for the panel content.
+  * @part metric-container - The container for the distance unit radio buttons.
+  * @part km-input - The radio input for selecting kilometers.
+  * @part km-label - The label for the kilometers radio input.
+  * @part mile-input - The radio input for selecting miles.
+  * @part mile-label - The label for the miles radio input.
+  * @part form-container - The container for the distance selector and location input.
+  * @part distance-selector-container - The container for the distance selector dropdown.
+  * @part distance-selector-wrapper - The wrapper around the distance selector dropdown.
+  * @part distance-selector - The distance selector dropdown.
+  * @part from-box - The "from" text between the distance selector and location input.
+  * @part postal-field-container - The container for the location input field.
+  * @part postal-filter-input - The input field for entering postal code or city.
+  * @part error-message - The container for displaying error messages related to location input.
+  **/
+
   // The Atomic bindings to be resolved on the parent atomic-search-interface.
   // Used to access the Headless engine in order to create controllers, dispatch actions, access state, etc.
   private bindings?: Bindings;
@@ -29,6 +54,8 @@ export class AtomicDistanceResources {
   // When disconnecting components from the page, we recommend removing
   // state change listeners as well by calling the unsubscribe methods.
   private statusUnsubscribe: Unsubscribe = () => { };
+  private facetUnsubscribe: Unsubscribe = () => { };
+  private i18nUnsubscribe = () => { };
 
   @Element() private element!: HTMLElement;
 
@@ -49,6 +76,11 @@ export class AtomicDistanceResources {
   private latitude: number;
   private longitude: number;
   private distances: Map<string, string> = new Map();
+  private facetRegistered = false;
+  private Id: string = 'atomic-distance-resources-id';
+  private label: string = 'Distance';
+  private distanceFacet: Facet;
+  private distanceFacetState: FacetState;
 
   /**
    * Specifies the name of the field in which to store the distance value.
@@ -85,11 +117,17 @@ export class AtomicDistanceResources {
     * and converted into options for the distance dropdown.
     */
   @Prop() geospatialDistances!: string[] | string;
-
-  private debouncedSearch: () => void;
+  /**
+   * The text that appears in the header.
+   */
+  @Prop() panelTitle: string = 'Distance';
+  /**
+ * Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.
+ */
+  @Prop({ reflect: true, mutable: true }) public isCollapsed = false;
 
   constructor() {
-    this.debouncedSearch = this.debounce(() => this.executeSearchWithChecks(), 300);
+    this.debouncedSearch = this.debounce(() => this.executeSearchWithChecks(), 200);
   }
 
   componentWillLoad() {
@@ -119,6 +157,20 @@ export class AtomicDistanceResources {
       // Set up location providers and try to set the position
       const providers = this.getProvidersFromOptions();
       await this.tryToSetPositionFromProviders(providers);
+
+
+      this.distanceFacet = buildFacet(this.bindings.engine, { options: this.facetOptions });
+
+      this.facetUnsubscribe = this.distanceFacet.subscribe(() => {
+        this.distanceFacetState = this.distanceFacet.state;
+      });
+
+      this.registerFacet();
+      // Re‐render on language change (i18n)
+      const updateLanguage = () => forceUpdate(this);
+      this.bindings.i18n.on('languageChanged', updateLanguage);
+      this.i18nUnsubscribe = () => this.bindings.i18n.off('languageChanged', updateLanguage);
+
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error(error);
@@ -128,6 +180,7 @@ export class AtomicDistanceResources {
 
     // Ensure executeFirstSearch is completed before any further actions
     if (this.searchEngine) {
+      //await this.searchEngine.executeFirstSearch();
       this.firstSearchCompleted = true;
 
       // If applyGeospatialFilter was called before firstSearchCompleted, execute it now
@@ -141,7 +194,9 @@ export class AtomicDistanceResources {
   // The `disconnectedCallback` lifecycle method should be used to unsubcribe controllers and
   // possibly the i18n language change listener.
   public disconnectedCallback() {
+    this.facetUnsubscribe();
     this.statusUnsubscribe();
+    this.i18nUnsubscribe();
   }
 
   public setPosition(latitude: number, longitude: number): void {
@@ -151,6 +206,49 @@ export class AtomicDistanceResources {
       this.longitude = longitude;
       this.applyGeospatialFilter();
     }
+  }
+
+  public get labelValue() {
+    return this.label;
+  }
+
+  public hasActiveValues() {
+    return this.distanceFacet?.state?.values?.some((v) => v.state === 'selected') ?? false;
+  }
+
+  public numberOfSelectedValues() {
+    return this.distanceFacet?.state?.values?.filter((v) => v.state === 'selected').length ?? 0;
+  }
+
+  private debouncedSearch: () => void;
+
+  private toggleCollapse = () => {
+    this.isCollapsed = !this.isCollapsed;
+  };
+
+  private registerFacet() {
+    if (this.facetRegistered) {
+      return;
+    }
+    this.bindings.store.registerFacet('facets', this.facetInfo);
+    this.facetRegistered = true;
+  }
+
+  private get facetOptions(): FacetOptions {
+    const opts: FacetOptions = {
+      facetId: this.Id,
+      field: this.distanceField,
+      hasBreadcrumbs: false
+    };
+    return opts;
+  }
+
+  private get facetInfo(): FacetInfo {
+    return {
+      facetId: this.Id!,
+      element: this.element,
+      label: () => this.bindings.i18n.t(this.label as any)
+    };
   }
 
   private getLatLngCookie() {
@@ -435,56 +533,88 @@ export class AtomicDistanceResources {
       return;
     }
 
+    if (!this.distanceFacetState) {
+      console.warn('Distance facet state is not initialized yet.');
+      return;
+    }
+
+    // plain chevron pointing down
+    const chevronSvg =
+      '<svg viewBox="0 0 12.6 7.2" xmlns="http://www.w3.org/2000/svg"><path d="m11.3 7.04c-.3 0-.5-.1-.7-.3l-4.6-4.6-4.6 4.6c-.4.4-1 .4-1.4 0s-.4-1 0-1.4l5.2-5.2c.4-.4 1.2-.4 1.6 0l5.2 5.2c.4.4.4 1 0 1.4-.2.2-.4.3-.7.3"/></svg>';
+
     return (
-      <div class="distance-panel">
-        <div class="filter-title">Distance</div>
-        <div class="distance-metric-rb">
-          <input type="radio" id="kilometers" name="unit" value="Kilometers" checked={this.unit === 'Kilometers'} onChange={() => this.setUnit('Kilometers')} />
-          <label htmlFor="kilometers">Kilometers</label>
-          <input type="radio" id="miles" name="unit" value="Miles" checked={this.unit === 'Miles'} onChange={() => this.setUnit('Miles')} />
-          <label htmlFor="miles">Miles</label>
-        </div>
-
-        <div class="form-container">
-          {/* Only render the select if geospatialDistances is set */}
-          {this.geospatialDistances && (
-            <Fragment>
-              <div class="distance-field">
-                <div class="locDistance">
-                  <select class="no-selectize no-bg" onInput={(event) => this.setDistance(event)}>
-                    {Array.from(this.distances.entries()).map(([key, value]) => (
-                      <option value={value}>{key}</option>
-                    ))}
-                  </select>
+      <div class="distance-panel" part="panel">
+        <button
+          class="btn-text-transparent flex w-full justify-between rounded-none px-2 py-1 text-lg font-bold ripple-parent ripple-relative"
+          part="label-button"
+          aria-label={
+            this.isCollapsed
+              ? `Expand the ${this.panelTitle} selector`
+              : `Collapse the ${this.panelTitle} selector`
+          }
+          aria-expanded={!this.isCollapsed}
+          onClick={this.toggleCollapse}>
+          <div class="truncate ripple-relative">{this.panelTitle}</div>
+          <atomic-icon
+            part="label-button-icon"
+            class={{
+              'ml-4 w-3 shrink-0 self-center hydrated ripple-relative': true,
+              // rotate the chevron 180° when isCollapsed
+              'rotate-180': this.isCollapsed,
+            }}
+            icon={chevronSvg}
+            aria-hidden="true"
+          ></atomic-icon>
+        </button>
+        <div class={{ 'panel-body': true, isCollapsed: this.isCollapsed }} part="content">
+          <div class="distance-metric-rb" part="metric-container">
+            <input type="radio" part="km-input" id="kilometers" name="unit" value="Kilometers" checked={this.unit === 'Kilometers'} onChange={() => this.setUnit('Kilometers')} />
+            <label htmlFor="kilometers" part="km-label">Kilometers</label>
+            <input type="radio" part="mile-input" id="miles" name="unit" value="Miles" checked={this.unit === 'Miles'} onChange={() => this.setUnit('Miles')} />
+            <label htmlFor="miles" part="mile-label">Miles</label>
+          </div>
+          <div class="form-container" part="form-container">
+            {/* Only render the select if geospatialDistances is set */}
+            {this.geospatialDistances && (
+              <Fragment>
+                <div class="distance-field" part="distance-selector-container">
+                  <div class="locDistance" part="distance-selector-wrapper">
+                    <select part="distance-selector" class="no-selectize no-bg" onInput={(event) => this.setDistance(event)}>
+                      {Array.from(this.distances.entries()).map(([key, value]) => (
+                        <option value={value}>{key}</option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </Fragment>
-          )}
+              </Fragment>
+            )}
 
-          {/* Only render if geospatialDistances and googleApiKey are both set */}
-          {this.geospatialDistances && this.googleApiKey && (
-            <Fragment>
-              <div class="seperator">from</div>
-            </Fragment>
-          )}
+            {/* Only render if geospatialDistances and googleApiKey are both set */}
+            {this.geospatialDistances && this.googleApiKey && (
+              <Fragment>
+                <div part="from-box" class="seperator">from</div>
+              </Fragment>
+            )}
 
-          {/* Only render the input if googleApiKey is set */}
-          {this.googleApiKey && (
-            <Fragment>
-              <div class="postal-code-box">
-                <input
-                  id="location-filter"
-                  class="location-filter-setLocation"
-                  type="text"
-                  placeholder="Postal Code/City"
-                  aria-label="Enter Postal Code or City"
-                  aria-invalid="false"
-                  onKeyDown={(event) => this.handleLocationInput(event)}
-                />
-                <div id="error-message" aria-live="assertive" role="alert"></div>
-              </div>
-            </Fragment>
-          )}
+            {/* Only render the input if googleApiKey is set */}
+            {this.googleApiKey && (
+              <Fragment>
+                <div class="postal-code-box" part="postal-field-container">
+                  <input
+                    id="location-filter"
+                    part="postal-filter-input"
+                    class="location-filter-setLocation"
+                    type="text"
+                    placeholder="Postal Code/City"
+                    aria-label="Enter Postal Code or City"
+                    aria-invalid="false"
+                    onKeyDown={(event) => this.handleLocationInput(event)}
+                  />
+                  <div part="error-message" id="error-message" aria-live="assertive" role="alert"></div>
+                </div>
+              </Fragment>
+            )}
+          </div>
         </div>
       </div>
     );

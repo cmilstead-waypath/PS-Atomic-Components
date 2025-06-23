@@ -1,5 +1,5 @@
 {
-  "timestamp": "2025-06-20T15:19:34",
+  "timestamp": "2025-06-23T14:49:37",
   "compiler": {
     "name": "@stencil/core",
     "version": "2.22.2",
@@ -8,8 +8,9 @@
   "components": [
     {
       "filePath": "./src/atomic-distance-resources.tsx",
-      "encapsulation": "none",
+      "encapsulation": "shadow",
       "tag": "atomic-distance-resources",
+      "readme": "# atomic-distance-resources\n\n\n",
       "docs": "",
       "docsTags": [],
       "usage": {},
@@ -100,6 +101,23 @@
           "required": true
         },
         {
+          "name": "isCollapsed",
+          "type": "boolean",
+          "mutable": true,
+          "attr": "is-collapsed",
+          "reflectToAttr": true,
+          "docs": "Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.",
+          "docsTags": [],
+          "default": "false",
+          "values": [
+            {
+              "type": "boolean"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
           "name": "latitudeField",
           "type": "string",
           "mutable": false,
@@ -132,6 +150,23 @@
           "required": true
         },
         {
+          "name": "panelTitle",
+          "type": "string",
+          "mutable": false,
+          "attr": "panel-title",
+          "reflectToAttr": false,
+          "docs": "The text that appears in the header.",
+          "docsTags": [],
+          "default": "'Distance'",
+          "values": [
+            {
+              "type": "string"
+            }
+          ],
+          "optional": false,
+          "required": false
+        },
+        {
           "name": "useNavigator",
           "type": "boolean",
           "mutable": false,
@@ -154,7 +189,76 @@
       "listeners": [],
       "styles": [],
       "slots": [],
-      "parts": [],
+      "parts": [
+        {
+          "name": "content",
+          "docs": ""
+        },
+        {
+          "name": "distance-selector",
+          "docs": ""
+        },
+        {
+          "name": "distance-selector-container",
+          "docs": ""
+        },
+        {
+          "name": "distance-selector-wrapper",
+          "docs": ""
+        },
+        {
+          "name": "error-message",
+          "docs": ""
+        },
+        {
+          "name": "form-container",
+          "docs": ""
+        },
+        {
+          "name": "from-box",
+          "docs": ""
+        },
+        {
+          "name": "km-input",
+          "docs": ""
+        },
+        {
+          "name": "km-label",
+          "docs": ""
+        },
+        {
+          "name": "label-button",
+          "docs": ""
+        },
+        {
+          "name": "label-button-icon",
+          "docs": ""
+        },
+        {
+          "name": "metric-container",
+          "docs": ""
+        },
+        {
+          "name": "mile-input",
+          "docs": ""
+        },
+        {
+          "name": "mile-label",
+          "docs": ""
+        },
+        {
+          "name": "panel",
+          "docs": ""
+        },
+        {
+          "name": "postal-field-container",
+          "docs": ""
+        },
+        {
+          "name": "postal-filter-input",
+          "docs": ""
+        }
+      ],
       "dependents": [],
       "dependencies": [],
       "dependencyGraph": {}

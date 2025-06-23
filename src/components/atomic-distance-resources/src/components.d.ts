@@ -28,6 +28,10 @@ export namespace Components {
          */
         "googleApiKey": string;
         /**
+          * Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.
+         */
+        "isCollapsed": boolean;
+        /**
           * Specifies the name of the field that contains the latitude value.
          */
         "latitudeField": string;
@@ -35,6 +39,10 @@ export namespace Components {
           * Specifies the name of the field that contains the longitude value.
          */
         "longitudeField": string;
+        /**
+          * The text that appears in the header.
+         */
+        "panelTitle": string;
         /**
           * Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.
          */
@@ -75,6 +83,10 @@ declare namespace LocalJSX {
          */
         "googleApiKey": string;
         /**
+          * Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property.
+         */
+        "isCollapsed"?: boolean;
+        /**
           * Specifies the name of the field that contains the latitude value.
          */
         "latitudeField": string;
@@ -82,6 +94,10 @@ declare namespace LocalJSX {
           * Specifies the name of the field that contains the longitude value.
          */
         "longitudeField": string;
+        /**
+          * The text that appears in the header.
+         */
+        "panelTitle"?: string;
         /**
           * Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.
          */

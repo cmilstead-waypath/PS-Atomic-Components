@@ -17,6 +17,7 @@
 | `isCollapsed`                      | `is-collapsed`         | Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property. | `boolean`            | `false`       |
 | `latitudeField` _(required)_       | `latitude-field`       | Specifies the name of the field that contains the latitude value.                                                                                       | `string`             | `undefined`   |
 | `longitudeField` _(required)_      | `longitude-field`      | Specifies the name of the field that contains the longitude value.                                                                                      | `string`             | `undefined`   |
+| `mobileBreakpoint`                 | `mobile-breakpoint`    | Mobile breakpoint at which the Apply button becomes visible                                                                                             | `string`             | `'640px'`     |
 | `panelTitle`                       | `panel-title`          | The text that appears in the header.                                                                                                                    | `string`             | `'Distance'`  |
 | `useNavigator`                     | `use-navigator`        | Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.                 | `boolean`            | `true`        |
 
@@ -42,6 +43,7 @@
 | `"panel"`                       |             |
 | `"postal-field-container"`      |             |
 | `"postal-filter-input"`         |             |
+| `"postal-submit-button"`        |             |
 
 
 ----------------------------------------------

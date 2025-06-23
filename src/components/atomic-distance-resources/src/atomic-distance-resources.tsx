@@ -1,5 +1,5 @@
 import { Bindings, initializeBindings } from '@coveo/atomic';
-import { Component, Prop, Element, h, State, Fragment, forceUpdate } from '@stencil/core';
+import { Component, Prop, Element, h, State, Fragment, forceUpdate, Watch } from '@stencil/core';
 import {
   SearchStatusState,
   buildSearchStatus,
@@ -41,6 +41,7 @@ export class AtomicDistanceResources {
   * @part from-box - The "from" text between the distance selector and location input.
   * @part postal-field-container - The container for the location input field.
   * @part postal-filter-input - The input field for entering postal code or city.
+  * @part postal-submit-button - The button to apply the location filter on mobile devices.
   * @part error-message - The container for displaying error messages related to location input.
   **/
 
@@ -62,6 +63,8 @@ export class AtomicDistanceResources {
   private firstSearchCompleted: boolean = false;
   private pendingApplyGeospatialFilter = false;
   private isSearchInProgress: boolean = false;
+  /** The input element reference for location filtering */
+  private postalInputEl?: HTMLInputElement;
 
   // Headless controller state property, using the `@State()` decorator.
   // Headless will automatically update these objects when the state related
@@ -126,11 +129,30 @@ export class AtomicDistanceResources {
  */
   @Prop({ reflect: true, mutable: true }) public isCollapsed = false;
 
+  /** Mobile breakpoint at which the Apply button becomes visible */
+  @Prop() mobileBreakpoint = '640px';
+  @State() private validatedBreakpoint = this.mobileBreakpoint;
+
   constructor() {
     this.debouncedSearch = this.debounce(() => this.executeSearchWithChecks(), 200);
   }
 
+  @Watch('mobileBreakpoint')
+  protected validateMobileBreakpoint(newVal: string) {
+    // Accept only numeric values ending in px or rem (e.g. "1024px", "1.5rem")
+    const valid = /^\d+(px|rem)$/i.test(newVal);
+    if (valid) {
+      this.validatedBreakpoint = newVal;
+    } else {
+      console.warn(
+        `[atomic-distance-resources] invalid mobileBreakpoint: "${newVal}". Falling back to default.`
+      );
+      this.validatedBreakpoint = '640px';
+    }
+  }
+
   componentWillLoad() {
+    this.validateMobileBreakpoint(this.mobileBreakpoint);
     this.registerDistanceValues();
   }
 
@@ -473,34 +495,29 @@ export class AtomicDistanceResources {
     }
   }
 
-  async handleLocationInput(event: KeyboardEvent | Event) {
-    const inputElement = event.target as HTMLInputElement;
-    const errorMessage = document.getElementById('error-message');
+  async handleLocationInput(event: KeyboardEvent) {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    this.applyLocation();
+  }
 
-    if (event instanceof KeyboardEvent && event.key !== 'Enter') {
+  /** Handle Apply button click on mobile */
+  private applyLocation = async () => {
+    if (!this.postalInputEl) return;
+    const value = this.postalInputEl.value.trim();
+    const errorEl = this.element.shadowRoot!.getElementById('error-message');
+    if (!value) {
+      if (errorEl) errorEl.textContent = 'Please enter a valid city or postal code.';
       return;
     }
-
-    this.location = inputElement.value.trim();
-
-    if (!this.location.trim()) {
-      errorMessage.textContent = 'Please enter a valid city or postal code.';
-      inputElement.setAttribute('aria-invalid', 'true');
-      inputElement.focus();
-    } else {
-      try {
-        const { latitude, longitude } = await this.resolveLocationToCoordinates(this.location.trim());
-        this.setPosition(latitude, longitude);
-        errorMessage.textContent = '';  // Clear error message
-        inputElement.setAttribute('aria-invalid', 'false');  // Mark input as valid
-      } catch (error) {
-        // Handle invalid location or API error
-        errorMessage.textContent = 'Location not found. Please enter a valid city or postal code.';
-        inputElement.setAttribute('aria-invalid', 'true');
-        inputElement.focus();
-      }
+    try {
+      const { latitude, longitude } = await this.resolveLocationToCoordinates(value);
+      this.setPosition(latitude, longitude);
+      if (errorEl) errorEl.textContent = '';
+    } catch {
+      if (errorEl) errorEl.textContent = 'Location not found. Please enter a valid city or postal code.';
     }
-  }
+  };
 
   setUnit(unit: 'Miles' | 'Kilometers') {
     this.unit = unit;
@@ -599,19 +616,34 @@ export class AtomicDistanceResources {
             {/* Only render the input if googleApiKey is set */}
             {this.googleApiKey && (
               <Fragment>
+                {/* dynamic mobile breakpoint styles */}
+                <style>{`
+                  .apply-btn.mobile-only { display: none; }
+                  @media (max-width: ${this.validatedBreakpoint}) {
+                    .apply-btn.mobile-only { display: inline-block; }
+                  }
+                `}</style>
                 <div class="postal-code-box" part="postal-field-container">
                   <input
                     id="location-filter"
                     part="postal-filter-input"
-                    class="location-filter-setLocation"
+                    class="location-filter-setLocation flex"
                     type="text"
                     placeholder="Postal Code/City"
                     aria-label="Enter Postal Code or City"
                     aria-invalid="false"
-                    onKeyDown={(event) => this.handleLocationInput(event)}
+                    onKeyDown={(event) => this.handleLocationInput(event as KeyboardEvent)}
+                    ref={(el) => this.postalInputEl = el as HTMLInputElement}
                   />
-                  <div part="error-message" id="error-message" aria-live="assertive" role="alert"></div>
                 </div>
+                <div part="error-message" id="error-message" aria-live="assertive" role="alert"></div>
+                <button
+                  part="postal-submit-button"
+                  class="bg-background border-neutral rounded-lg border p-4 my-4"
+                  aria-label="Apply location filter"
+                  onClick={() => this.applyLocation()}>
+                  Apply
+                </button>
               </Fragment>
             )}
           </div>

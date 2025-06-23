@@ -65,6 +65,7 @@ Place the component in your `atomic-facet-manager` to include it alongside other
 | `isCollapsed`                      | `is-collapsed`         | Specifies whether the facet is collapsed. When the facet is the child of an `atomic-facet-manager` component, the facet manager controls this property. | `boolean`            | `false`       |
 | `latitudeField` _(required)_       | `latitude-field`       | Specifies the name of the field that contains the latitude value.                                                                                       | `string`             | `undefined`   |
 | `longitudeField` _(required)_      | `longitude-field`      | Specifies the name of the field that contains the longitude value.                                                                                      | `string`             | `undefined`   |
+| `mobileBreakpoint`                 | `mobile-breakpoint`    | Mobile breakpoint at which the Apply button becomes visible                                                                                             | `string`             | `'640px'`     |
 | `panelTitle`                       | `panel-title`          | The text that appears in the header.                                                                                                                    | `string`             | `'Distance'`  |
 | `useNavigator`                     | `use-navigator`        | Whether to request the geolocation service of the web browser. If not defined, will not try to request the service. Defaults to `true`.                 | `boolean`            | `true`        |
 
@@ -89,7 +90,7 @@ Place the component in your `atomic-facet-manager` to include it alongside other
 | `"panel"`                       | The root element of the component.                                      |
 | `"postal-field-container"`      | The container for the location input field.                             |
 | `"postal-filter-input"`         | The input field for entering postal code or city.                       |
-
+| `"postal-submit-button"`        | The button to apply the location filter on mobile devices.              |
 
 ----------------------------------------------
 

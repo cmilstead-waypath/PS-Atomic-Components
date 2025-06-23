@@ -2245,6 +2245,10 @@ input[type='text']:hover ~ .search-icon {
   display: block; /* Show when the message has content */
 }
 
+.distance-panel #error-message[aria-live="assertive"] {
+  display: none; /* Hide when the message does not have content */
+}
+
 .panel-body.isCollapsed {
   display: none;
 }
